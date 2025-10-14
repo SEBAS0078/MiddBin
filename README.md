@@ -1,3 +1,5 @@
+![workflow status](https://github.com/csci0312-f25/project-amber-aardvark/actions/workflows/node.js.yml/badge.svg)
+
 
 MidBin
 
@@ -10,4 +12,6 @@ Collaborators:
 - Sebastian Pantzer
 - Ben King
 
-![workflow status](https://github.com/csci0312-f25/project-amber-aardvark/actions/workflows/node.js.yml/badge.svg)
+made a change to the Readme to test pull request
+More changes. 
+etc. 
