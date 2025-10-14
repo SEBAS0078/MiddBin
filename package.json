@@ -1,5 +1,14 @@
 {
-  "name": "project-template",
+  "name": "MiddBin",
+  "contributors": [
+    "Sebastian Cruz, Sebastian",
+    "Shari Bhu",
+    "Arai Hardy",
+    "Sebastian Pantzer",
+    "Ben King"
+  ],
+  "repository": "git@github.com:csci0312-f25/project-amber-aardvark.git",
+  "description": "Market Place for Middlebury College students",
   "version": "0.1.0",
   "private": true,
   "scripts": {
