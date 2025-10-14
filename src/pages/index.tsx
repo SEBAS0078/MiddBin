@@ -5,13 +5,13 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>CS 312 Project Template</title>
+        <title>MiddBin</title>
 
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={`${styles.page}`}>
         <main className={styles.main}>
-          <h1>Replace with your project</h1>
+          <h1>MiddBin</h1>
         </main>
         <footer className={styles.footer}>CS312 Project Template</footer>
       </div>
