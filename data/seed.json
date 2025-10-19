@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Blue Shirt for Sale",
+    "details": "A nice blue shirt",
+    "picture": "INSERT URL",
+    "id": 0,
+    "seller": "Sebastian",
+    "price": 100,
+    "category": "clothes",
+    "sub-category": "shirt",
+    "color": "blue",
+    "size": "M",
+    "condition": "used",
+    "gender": "M"
+  },
+  {
+    "title": "Orange Pants",
+    "details": "Some used old orange pants",
+    "picture": "INSERT URL",
+    "id": 1,
+    "seller": "Sebastian",
+    "price": 100,
+    "category": "clothes",
+    "sub-category": "shirt",
+    "color": "blue",
+    "size": "M",
+    "condition": "used",
+    "gender": "M"
+  }
+]
