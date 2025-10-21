@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import styles from "@/styles/Home.module.css";
 import data from "../../data/seed.json";
+import SearchBar from "../components/searchBar";
 import CreateListing from "./listings/CreateListing";
 
 export default function Home() {
@@ -44,6 +45,7 @@ export default function Home() {
           height={100}
         />
       </div>
+      <SearchBar />
 
       <div className={`${styles.page}`}>
         <main className={styles.main}>
