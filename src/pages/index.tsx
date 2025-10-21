@@ -1,4 +1,6 @@
 import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import styles from "@/styles/Home.module.css";
 import data from "../../data/seed.json";
@@ -15,6 +17,34 @@ export default function Home() {
 
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <nav>
+        <ul className={styles.navBar}>
+          <li className={styles.navItem}>
+            <Link href="/" className={styles.navLink}>
+              Home
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href="/about" className={styles.navLink}>
+              About
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href="/contact" className={styles.navLink}>
+              Contact
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <div className={styles.logoWrapper}>
+        <Image
+          src="/MiddBinLogo.jpeg"
+          alt="MiddBin Logo"
+          width={100}
+          height={100}
+        />
+      </div>
+
       <div className={`${styles.page}`}>
         <main className={styles.main}>
           <h1>MiddBin</h1>

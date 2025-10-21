@@ -1,0 +1,30 @@
+/* Navigation Bar stuff */
+
+.navBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  list-style-type: none;
+  background-color: #2f58fa;
+  border-style: solid;
+  border-color: #2f58fa;
+}
+
+.navItem {
+  padding: 5px;
+}
+
+.navLink {
+  font-size: 15px;
+  color: #7dcfff;
+  padding: 14px 16px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.navLink:hover {
+  background-color: #bafaff;
+  color: white;
+}
