@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import ListingCard from "@/components/ListingCard";
 import styles from "@/styles/Home.module.css";
 import data from "../../data/seed.json";
 import SearchBar from "../components/searchBar";
@@ -67,9 +68,20 @@ export default function Home() {
               setCreateListing={setCreateListing}
             />
           )}
-          {collection.map((listing) => {
-            return <h1 key={listing.id}>{listing.title}</h1>;
-          })}
+
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "20px",
+              justifyContent: "center",
+              marginTop: "40px",
+            }}
+          >
+            {collection.map((listing) => (
+              <ListingCard key={listing.id} />
+            ))}
+          </div>
         </main>
 
         <footer className={styles.footer}>CS312 Project Template</footer>
