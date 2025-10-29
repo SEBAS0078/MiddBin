@@ -15,3 +15,5 @@ Collaborators:
 made a change to the Readme to test pull request
 More changes. 
 etc. 
+
+Shari: Implemented and rendered the ListingCard UI component for displaying listings on the homepage.
