@@ -1,6 +1,6 @@
 // import { useRouter } from "next/router";
 import { useState } from "react";
-import styles from "../../styles/CreateListing.module.css";
+import styles from "../styles/CreateListing.module.css";
 
 export default function CreateListing({
   collection,
