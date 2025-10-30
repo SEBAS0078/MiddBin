@@ -32,7 +32,7 @@ const [query, setQuery] = useState("");
   });
 
   return (
-        <div>
+    <div>
     <div className={styles.searchWrapper}>
       <label htmlFor="search"></label>
       <input

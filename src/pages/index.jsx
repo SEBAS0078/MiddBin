@@ -69,7 +69,7 @@ export default function Home() {
               setCreateListing={setCreateListing}
             />
           )}
-          <ListingGrid collection={collection}/>
+          <ListingGrid collection={collection} />
         </main>
 
         <footer className={styles.footer}>CS312 Project Template</footer>
