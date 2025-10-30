@@ -2,12 +2,10 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import ListingCard from "@/Components/ListingCard";
-import ListingGrid from "@/Components/ListingGrid";
+import ListingGrid from "@/components/ListingGrid";
 import styles from "@/styles/Home.module.css";
 import data from "../../data/seed.json";
-import SearchBar from "../components/searchBar";
-import CreateListing from "./listings/CreateListing";
+import CreateListing from "../components/CreateListing";
 
 export default function Home() {
   const [collection, setCollection] = useState(data);
@@ -71,12 +69,7 @@ export default function Home() {
               setCreateListing={setCreateListing}
             />
           )}
-          <SearchBar />
-          <div className={styles.listingGrid}>
-            {collection.map((listing) => (
-              <ListingCard key={listing.id} item={listing} />
-            ))}
-          </div>
+          <ListingGrid collection={collection} />
         </main>
 
         <footer className={styles.footer}>CS312 Project Template</footer>
