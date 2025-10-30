@@ -2,7 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import ListingCard from "@/components/ListingCard";
+import ListingCard from "@/Components/ListingCard";
+import ListingGrid from "@/Components/ListingGrid";
 import styles from "@/styles/Home.module.css";
 import data from "../../data/seed.json";
 import SearchBar from "../components/searchBar";
@@ -38,18 +39,17 @@ export default function Home() {
           </li>
         </ul>
       </nav>
-      <div className={styles.logoWrapper}>
-        <Image
-          src="/MiddBinLogo.jpeg"
-          alt="MiddBin Logo"
-          width={100}
-          height={100}
-        />
-      </div>
-      <SearchBar />
 
       <div className={`${styles.page}`}>
         <main className={styles.main}>
+          <div className={styles.logoWrapper}>
+            <Image
+              src="/MiddBinLogo.jpeg"
+              alt="MiddBin Logo"
+              width={100}
+              height={100}
+            />
+          </div>
           <h1>MiddBin</h1>
           <p>A Market place for Middlebury college students</p>
           {!createListing && (
@@ -61,6 +61,9 @@ export default function Home() {
               Create Listing!
             </button>
           )}
+          {/* <Link href="/listing/CreateListing" className={styles.navLink}>
+              About
+            </Link> */}
           {createListing && (
             <CreateListing
               collection={collection}
@@ -68,23 +71,10 @@ export default function Home() {
               setCreateListing={setCreateListing}
             />
           )}
-
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "20px",
-              justifyContent: "center",
-              marginTop: "40px",
-            }}
-          >
+          <SearchBar />
+          <div className={styles.listingGrid}>
             {collection.map((listing) => (
-              <ListingCard
-                key={listing.id}
-                title={listing.title}
-                price={listing.price}
-                image={listing.picture}
-              />
+              <ListingCard key={listing.id} item={listing} />
             ))}
           </div>
         </main>

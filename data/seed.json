@@ -2,7 +2,7 @@
   {
     "title": "Blue Shirt for Sale",
     "details": "A nice blue shirt",
-    "picture": "INSERT URL",
+    "picture": "https://hourscollection.com/cdn/shop/files/DropShoulderT-shirt-RoyalBlue-product.jpg?v=1740118209",
     "id": 0,
     "seller": "Sebastian",
     "price": 100,
@@ -16,15 +16,15 @@
   {
     "title": "Orange Pants",
     "details": "Some used old orange pants",
-    "picture": "INSERT URL",
+    "picture": "https://allsecurityequipment.com/cdn/shop/products/Rothco-Tactical-BDU-Cargo-Pants-Regular-Inseam-_BlazeOrange_-4_1024x.png?v=1673000863",
     "id": 1,
     "seller": "Sebastian",
-    "price": 100,
+    "price": 40,
     "category": "clothes",
     "sub-category": "shirt",
     "color": "blue",
     "size": "M",
-    "condition": "used",
+    "condition": "like new",
     "gender": "M"
   },
   {
