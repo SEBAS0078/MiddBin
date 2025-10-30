@@ -1,4 +1,10 @@
-export default function ListingCard() {
+type ListingCardProps = {
+  title: string;
+  price: number;
+  image: string;
+};
+
+export default function ListingCard({ title, price, image }: ListingCardProps) {
   return (
     <div
       style={{
@@ -10,12 +16,12 @@ export default function ListingCard() {
       }}
     >
       <img
-        src="https://via.placeholder.com/200x120"
-        alt="Item"
+        src={image}
+        alt={title}
         style={{ width: "100%", borderRadius: "6px" }}
       />
-      <h3 style={{ margin: "8px 0 4px", fontSize: "18px" }}>Sample Item</h3>
-      <p style={{ margin: 0, color: "#555" }}>$20</p>
+      <h3 style={{ margin: "8px 0 4px", fontSize: "18px" }}>{title}</h3>
+      <p style={{ margin: 0, color: "#555" }}>${price}</p>
     </div>
   );
 }
