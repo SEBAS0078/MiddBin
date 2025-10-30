@@ -1,6 +1,4 @@
 import { useState } from "react";
-import SectionsView from "./SectionsView.jsx";
-import TitlesView from "./TitlesView.jsx";
 
 export default function Filter({ collection = [], setCurrentListing }) {
   const [currentPrice, setCurrentPrice] = useState();
@@ -19,7 +17,7 @@ export default function Filter({ collection = [], setCurrentListing }) {
   const catCategory = [...new Set(collection.map((i) => i.Category))];
   const catColor = [...new Set(collection.map((i) => i.color))];
 
-  const filteredListings = itemsData.filter((item) => {
+  const filteredListings = collection.filter((item) => {
     return (
       ((category === "" || item.category === category) &&
         (color === "" || item.color === color) &&
@@ -28,18 +26,5 @@ export default function Filter({ collection = [], setCurrentListing }) {
     );
   });
 
-  return (
-    <div>
-      {" "}
-      <SectionsView sections={sections} setCurrentSection={newSection} />
-      {currentSection ? (
-        <TitlesView
-          articles={filteredTitles}
-          setCurrentListing={setCurrentListing}
-        />
-      ) : (
-        <p>Select a section</p>
-      )}
-    </div>
-  );
+  return <div></div>;
 }
