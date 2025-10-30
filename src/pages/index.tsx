@@ -79,7 +79,12 @@ export default function Home() {
             }}
           >
             {collection.map((listing) => (
-              <ListingCard key={listing.id} />
+              <ListingCard
+                key={listing.id}
+                title={listing.title}
+                price={listing.price}
+                image={listing.picture}
+              />
             ))}
           </div>
         </main>
