@@ -256,7 +256,7 @@ body {
 
 .searchWrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-family: sans-serif;
   max-width: 500px;
   margin: 1rem auto 0;
@@ -282,4 +282,20 @@ body {
 
 .searchWrapper input[type="text"]:focus {
   border-color: #ffffff;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filters > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchWrapper label,
+.filters label {
+  color: #ffffff;
 }

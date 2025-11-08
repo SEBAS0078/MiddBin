@@ -1,5 +1,4 @@
 import styles from "../styles/ListingCard.module.css";
-
 export default function ListingCard({ item }) {
   return (
     <div className={styles.card}>
