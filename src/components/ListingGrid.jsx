@@ -1,55 +1,119 @@
-import React from "react";
 import { useState } from "react";
-import styles from "@/styles/Home.module.css";
 import ListingCard from "@/components/ListingCard";
+import SearchBar from "@/components/SearchBar";
+import styles from "@/styles/Home.module.css";
 
-export default function ListingGrid({ collection = [], setCurrentListing }) {
-  const [currentPrice, setCurrentPrice] = useState();
-  const [currentCat, setCurrentCat] = useState();
-  const [currentColor, setCurrentColor] = useState();
-const [query, setQuery] = useState("");
+export default function ListingGrid({ collection = [] }) {
+  const [currentPrice, setCurrentPrice] = useState("");
+  const [currentCat, setCurrentCat] = useState("");
+  const [currentColor, setCurrentColor] = useState("");
+  const [query, setQuery] = useState("");
 
   const catPrice = [
     ...new Set(
       collection.map((i) => {
         if (i.price > 100) return "100+";
-        else if (i.price > 50) return "50-100";
-        else if (i.price > 20) return "20-50";
-        else return "0-20";
+        else if (i.price > 50) return "50-99";
+        else if (i.price > 20) return "20-49";
+        else return "0-19";
       }),
     ),
   ];
-  const catCategory = [...new Set(collection.map((i) => i.Category))];
+  const catCategory = [...new Set(collection.map((i) => i.category))];
   const catColor = [...new Set(collection.map((i) => i.color))];
+
+  const priceInRange = (price) => {
+    if (price >= 100) return "100+";
+    else if (price >= 50) return "50-99";
+    else if (price >= 20) return "20-49";
+    else return "0-19";
+  };
 
   const filteredListings = collection.filter((item) => {
     return (
-      ((currentCat=== "" || item.category === currentCat) &&
-        (currentColor === "" || item.color === currentCat) &&
-        (currentPrice === "" || item.price <= Number(maxPrice))) ??
-      "No items matched the criteria."
+      (query === "" ||
+        (item.name?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
+        (item.details?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
+        (item.category?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
+        (item.color?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
+        (item.price?.toString().includes(query) ?? false)) &&
+      (currentCat === "" || item.category === currentCat) &&
+      (currentColor === "" || item.color === currentColor) &&
+      (currentPrice === "" || priceInRange(item.price) === currentPrice)
     );
   });
 
   return (
     <div>
-    <div className={styles.searchWrapper}>
-      <label htmlFor="search"></label>
-      <input
-        type="text"
-        id="start typing here...."
-        name="search"
-        placeholder="Search...."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-    </div>
+      <SearchBar search={setQuery} />
+
+      <div className={styles.filters}>
+        <div>
+          <label htmlFor="price">Price</label>
+          <select
+            onChange={(e) => setCurrentPrice(e.target.value)}
+            id="price"
+            value={currentPrice}
+          >
+            <option value="">All</option>
+            {catPrice.map((price) => (
+              <option key={price} value={price}>
+                {price}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="category">Category</label>
+          <select
+            onChange={(e) => setCurrentCat(e.target.value)}
+            id="category"
+            value={currentCat}
+          >
+            <option value="">All</option>
+            {catCategory.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="color">Color</label>
+          <select
+            onChange={(e) => setCurrentColor(e.target.value)}
+            id="color"
+            value={currentColor}
+          >
+            <option value="">All</option>
+            {catColor.map((color) => (
+              <option key={color} value={color}>
+                {color}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              setCurrentPrice("");
+              setCurrentCat("");
+              setCurrentColor("");
+              setQuery("");
+            }}
+          >
+            Clear Filters
+          </button>
+        </div>
+      </div>
 
       <div className={styles.listingGrid}>
-            {collection.map((listing) => (
-              <ListingCard key={listing.id} item={listing} />
-            ))}
-          </div>
-        </div>
+        {filteredListings.map((listing) => (
+          <ListingCard key={listing.id} item={listing} />
+        ))}
+        {filteredListings.length === 0 && <p>No listings found.</p>}
+      </div>
+    </div>
   );
 }
