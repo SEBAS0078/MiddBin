@@ -7,15 +7,34 @@ import styles from "@/styles/Home.module.css";
 import data from "../../data/seed.json";
 import CreateListing from "../components/CreateListing";
 
+export interface Listing {
+  id: number;
+  title: string;
+  price: number;
+  details: string;
+  picture: string;
+  seller: string;
+  category: string;
+  subCategory: string;
+  color: string;
+  size: string;
+  condition: string;
+  gender: string;
+}
+
 export default function Home() {
-  const [collection, setCollection] = useState(data);
+  const [collection, setCollection] = useState<Listing[]>(
+    (data as any[]).map((item) => ({
+      ...item,
+      subCategory: item["sub-category"],
+    })),
+  );
   const [createListing, setCreateListing] = useState(false);
 
   return (
     <>
       <Head>
         <title>MiddBin</title>
-
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <nav>
@@ -37,8 +56,7 @@ export default function Home() {
           </li>
         </ul>
       </nav>
-
-      <div className={`${styles.page}`}>
+      <div className={styles.page}>
         <main className={styles.main}>
           <div className={styles.logoWrapper}>
             <Image
@@ -59,9 +77,6 @@ export default function Home() {
               Create Listing!
             </button>
           )}
-          {/* <Link href="/listing/CreateListing" className={styles.navLink}>
-              About
-            </Link> */}
           {createListing && (
             <CreateListing
               collection={collection}
@@ -71,7 +86,6 @@ export default function Home() {
           )}
           <ListingGrid collection={collection} />
         </main>
-
         <footer className={styles.footer}>CS312 Project Template</footer>
       </div>
     </>
