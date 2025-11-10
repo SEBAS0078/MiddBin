@@ -1,35 +1,42 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ListingGrid from "@/components/ListingGrid";
 import styles from "@/styles/Home.module.css";
-import data from "../../data/seed.json";
-import CreateListing from "../components/CreateListing";
+import Navbar from "../components/Navbar";
+import { fetchListings } from "../lib/db_functions";
 
-export interface Listing {
-  id: number;
-  title: string;
-  price: number;
-  details: string;
-  picture: string;
-  seller: string;
-  category: string;
-  subCategory: string;
-  color: string;
-  size: string;
-  condition: string;
-  gender: string;
-}
+export type Listing = {
+  title: string; // required
+  description?: string; // optional, defaults to ""
+  img: string; // required (picture URL)
+  price: number; // required
+  category?: string; // optional, defaults to ""
+  subCategory?: string; // optional, defaults to ""
+  color?: string; // optional, defaults to ""
+  size?: string; // optional, defaults to ""
+  condition?: string; // optional, defaults to ""
+  gender?: string; // optional, defaults to ""
+  created?: string; // auto-set timestamp
+};
 
 export default function Home() {
-  const [collection, setCollection] = useState<Listing[]>(
-    (data as any[]).map((item) => ({
-      ...item,
-      subCategory: item["sub-category"],
-    })),
-  );
-  const [createListing, setCreateListing] = useState(false);
+  const [collection, setCollection] = useState<Listing[]>([]);
+
+  useEffect(() => {
+    async function loadListings() {
+      const { data, error } = await fetchListings();
+
+      if (error) {
+        alert("Error fetching listings:");
+      } else {
+        setCollection(data);
+      }
+    }
+
+    loadListings();
+  }, []);
 
   return (
     <>
@@ -37,26 +44,9 @@ export default function Home() {
         <title>MiddBin</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <nav>
-        <ul className={styles.navBar}>
-          <li className={styles.navItem}>
-            <Link href="/" className={styles.navLink}>
-              Home
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/about" className={styles.navLink}>
-              About
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/contact" className={styles.navLink}>
-              Contact
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <div className={styles.page}>
+
+      <Navbar />
+      <div className={`${styles.page}`}>
         <main className={styles.main}>
           <div className={styles.logoWrapper}>
             <Image
@@ -68,22 +58,10 @@ export default function Home() {
           </div>
           <h1>MiddBin</h1>
           <p>A Market place for Middlebury college students</p>
-          {!createListing && (
-            <button
-              type="button"
-              className={styles.createButton}
-              onClick={() => setCreateListing(true)}
-            >
-              Create Listing!
-            </button>
-          )}
-          {createListing && (
-            <CreateListing
-              collection={collection}
-              setCollection={setCollection}
-              setCreateListing={setCreateListing}
-            />
-          )}
+
+          <Link className={styles.createButton} href="/CreateListing">
+            Create Listing!
+          </Link>
           <ListingGrid collection={collection} />
         </main>
         <footer className={styles.footer}>CS312 Project Template</footer>

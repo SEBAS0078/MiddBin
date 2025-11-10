@@ -4,15 +4,17 @@ import SearchBar from "@/components/SearchBar";
 import styles from "@/styles/Home.module.css";
 
 type Listing = {
-  id: number;
-  name?: string;
-  details?: string;
-  picture: string;
-  price: number;
-  category?: string;
-  color?: string;
-  title: string;
-  condition: string;
+  title: string; // required
+  description?: string; // optional, defaults to ""
+  img: string; // required (picture URL)
+  price: number; // required
+  category?: string; // optional, defaults to ""
+  subCategory?: string; // optional, defaults to ""
+  color?: string; // optional, defaults to ""
+  size?: string; // optional, defaults to ""
+  condition?: string; // optional, defaults to ""
+  gender?: string; // optional, defaults to ""
+  created?: string; // auto-set timestamp
 };
 type ListingGridProps = {
   collection?: Listing[];
@@ -47,8 +49,9 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
   const filteredListings = collection.filter((item) => {
     return (
       (query === "" ||
-        (item.name?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
-        (item.details?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
+        (item.title?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
+        (item.description?.toLowerCase().includes(query.toLowerCase()) ??
+          false) ||
         (item.category?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
         (item.color?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
         (item.price?.toString().includes(query) ?? false)) &&
@@ -125,7 +128,7 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
 
       <div className={styles.listingGrid}>
         {filteredListings.map((listing) => (
-          <ListingCard key={listing.id} item={listing} />
+          <ListingCard key={listing.title} item={listing} />
         ))}
         {filteredListings.length === 0 && <p>No listings found.</p>}
       </div>

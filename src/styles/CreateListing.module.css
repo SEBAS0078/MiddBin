@@ -1,90 +1,104 @@
 /* ---------- Form Container ---------- */
 .formContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-
-  /* Glass effect */
-  background: rgba(30, 30, 60, 0.4);
-  backdrop-filter: blur(10px);
-  border-radius: 1rem;
-  box-shadow: 0 0 20px rgba(0, 0, 60, 0.3);
-
-  /* Gradient border */
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two equal-width columns */
+  gap: 2rem; /* space between columns */
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 1.5rem auto;
+  border-radius: 1.2rem;
+  box-shadow: 0 0 25px rgba(0, 0, 60, 0.4);
   transition: all 0.3s ease;
-  width: 100%;
+  width: calc(100% - 3rem); /* space from page edges */
 }
 
 .formContainer:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 25px rgba(100, 150, 255, 0.3);
+}
+.inputLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-/* ---------- Input and Textarea Styling ---------- */
+/* ---------- Input Group Containers ---------- */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.label {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- Inputs ---------- */
 .title,
 .price,
 .textArea {
   width: 100%;
   padding: 0.9rem 1rem;
-  border: none;
   border-radius: 0.6rem;
   outline: none;
+  border: none;
 
-  color: #fff;
+  color: #ffffff;
   font-size: 1rem;
-  font-family: "Inter", "SF Pro Display", sans-serif;
-
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.15);
   transition: all 0.3s ease;
-  margin: 5px;
-}
-
-.label {
-  padding: 2px;
-  color: #fff;
-  margin-top: 15px;
 }
 
 .title:focus,
 .price:focus,
-.textArea:focus {
+.textArea:focus,
+select:focus {
   background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 10px rgba(100, 150, 255, 0.6);
-  border: 1px solid rgba(150, 200, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 200, 0.5);
+  border: 1px solid rgba(0, 255, 200, 0.4);
 }
 
+/* ---------- Textarea ---------- */
 .textArea {
   min-height: 120px;
   resize: vertical;
 }
+
+/* ---------- Button Container ---------- */
 .buttonContainer {
+  grid-column: 1 / -1; /* Make buttons span both columns */
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
-/* ---------- Base Button ---------- */
+/* ---------- Buttons ---------- */
 .cancelButton,
 .submitButton {
-  font-family: "Inter", "SF Pro Display", sans-serif;
   font-weight: 600;
-  border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  padding: 0.8rem 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 0.7rem 1.6rem;
-  color: white;
+  border: none;
 }
 
-/* ---------- Cancel Button ---------- */
+.submitButton {
+  background: linear-gradient(135deg, #00ff99, #00b4d8);
+  color: black;
+  box-shadow: 0 0 15px rgba(0, 255, 150, 0.4);
+}
+
+.submitButton:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 0 25px rgba(0, 255, 149, 0.6);
+}
+
 .cancelButton {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ccc;
 }
 
@@ -92,22 +106,24 @@
   background: linear-gradient(135deg, #df0000, #d8bf00);
   color: white;
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* ---------- Submit Button ---------- */
-.submitButton {
-  background: linear-gradient(135deg, #00ff99, #00b4d8);
-  color: black;
-  padding: 0.8rem 2.2rem;
-  font-size: 1.05rem;
-  box-shadow: 0 0 15px rgba(0, 255, 150, 0.4);
-  border: 2px solid transparent;
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .formContainer {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
 }
 
-.submitButton:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 0 22px rgba(0, 255, 149, 0.489);
-  border-color: rgba(0, 255, 200, 0.4);
-  background: linear-gradient(135deg, #00ffb3, #00c2ff);
+.header {
+  justify-self: center;
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  color: #ffffff;
+  text-shadow:
+    0 0 5px #0048ff,
+    0 0 10px #00ffbf,
+    0 0 20px #2200ff,
+    0 0 40px #00fbff88;
 }

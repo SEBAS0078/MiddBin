@@ -177,6 +177,9 @@ body {
 }
 
 .createButton {
+  display: flex; /* enable flexbox */
+  align-items: center; /* vertically center items */
+  justify-content: center;
   padding: 0.9rem 1.8rem;
   border-radius: 0.75rem;
   font-size: 1.1rem;
