@@ -1,23 +1,47 @@
 // import { useRouter } from "next/router";
+
+import type { Dispatch, FormEvent, SetStateAction } from "react";
 import { useState } from "react";
 import styles from "../styles/CreateListing.module.css";
+
+type Listing = {
+  id: number;
+  title: string;
+  details: string;
+  picture: string;
+  seller: string;
+  price: number;
+  category: string;
+  subCategory: string;
+  color: string;
+  size: string;
+  condition: string;
+  gender: string;
+};
+
+type CreateListingProps = {
+  collection: Listing[];
+  setCollection: Dispatch<SetStateAction<Listing[]>>;
+  setCreateListing: Dispatch<SetStateAction<boolean>>;
+};
 
 export default function CreateListing({
   collection,
   setCollection,
   setCreateListing,
-}) {
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState(0);
-  const [description, setDescription] = useState("");
-  const [picture, setPicture] = useState("");
-  const [contact, setContact] = useState("");
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [color, setColor] = useState("");
-  const [size, setSize] = useState("");
-  const [condition, setCondition] = useState("");
-  const [gender, setGender] = useState("");
+}: CreateListingProps) {
+  const [title, setTitle] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
+  const [description, setDescription] = useState<string>("");
+  const [picture, setPicture] = useState<string>("");
+  const [contact, setContact] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [subCategory, setSubCategory] = useState<string>("");
+  const [color, setColor] = useState<string>("");
+  const [size, setSize] = useState<string>("");
+  const [condition, setCondition] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+
   const availableCategories = [
     "furniture",
     "electronics",
@@ -28,7 +52,7 @@ export default function CreateListing({
     "transportation",
     "free",
   ];
-  const availableSubcategories = {
+  const availableSubcategories: Record<string, string[]> = {
     furniture: ["Desk", "Chair", "Bed Frame", "Couch", "Dresser"],
     electronics: ["Laptop", "Headphones", "Phone", "Monitor", "Speakers"],
     clothing: ["Shirt", "Pants", "Jacket", "Shoes", "Accessories"],
@@ -38,43 +62,41 @@ export default function CreateListing({
     transportation: ["Bike", "Skateboard", "Carpool", "Scooter"],
     free: ["Miscellaneous", "Giveaways", "Leftovers"],
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if ((title === "") | (price === "") | (contact === "")) {
+    if (title === "" || price === 0 || contact === "") {
       alert("⚠️ Please fill out all the required fields before submitting.");
       return;
-    } else {
-      //Max ID
-      const maxId = collection.reduce((max, listing) => {
-        return listing.id > max ? listing.id : max;
-      }, 0); // 0 is the initial max
-
-      const listing = {
-        title: title,
-        details: description,
-        picture: "INSERT URL",
-        id: maxId + 1,
-        seller: "Sebastian",
-        price: price,
-        category: "clothes",
-        subCategory: "shirt",
-        color: "blue",
-        size: "M",
-        condition: "used",
-        gender: "M",
-      };
-
-      const newArray = [...collection, listing];
-      setCollection(newArray);
-      //setCurrentArticle(article);
-      setCreateListing(false);
     }
+
+    const maxId = collection.reduce((max, listing) => {
+      return listing.id > max ? listing.id : max;
+    }, 0);
+
+    const listing: Listing = {
+      title,
+      details: description,
+      picture: picture || "INSERT URL",
+      id: maxId + 1,
+      seller: "Sebastian",
+      price,
+      category: category || "clothes",
+      subCategory: subCategory || "shirt",
+      color: color || "blue",
+      size: size || "M",
+      condition: condition || "used",
+      gender: gender || "M",
+    };
+
+    setCollection([...collection, listing]);
+    setCreateListing(false);
   };
 
   return (
     <div>
-      <form className={styles.formContainer} onSubmit={(e) => handleSubmit(e)}>
-        <label for="title" className={styles.label}>
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
+        <label htmlFor="title" className={styles.label}>
           Title *
         </label>
         <input
@@ -82,7 +104,7 @@ export default function CreateListing({
           id="title"
           type="text"
           value={title}
-          placeHolder="Amazing and descriptive title"
+          placeholder="Amazing and descriptive title"
           onChange={(e) => setTitle(e.target.value)}
         />
         {/* Picture URL */}
@@ -98,7 +120,7 @@ export default function CreateListing({
           onChange={(e) => setPicture(e.target.value)}
         />
 
-        <label for="description" className={styles.label}>
+        <label htmlFor="description" className={styles.label}>
           Description
         </label>
         <textarea
@@ -106,7 +128,7 @@ export default function CreateListing({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
-        <label for="price" className={styles.label}>
+        <label htmlFor="price" className={styles.label}>
           Price *
         </label>
         <input
@@ -115,7 +137,7 @@ export default function CreateListing({
           type="number"
           value={price}
           placeholder="PRICE"
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={(e) => setPrice(Number(e.target.value))}
         />
         {/* Contact */}
         <label htmlFor="contact" className={styles.label}>

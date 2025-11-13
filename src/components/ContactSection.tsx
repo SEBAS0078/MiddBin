@@ -1,6 +1,14 @@
 import React from "react";
 
-export default function ContactSection({ sellerName, sellerEmail }) {
+interface ContactSectionProps {
+  sellerName: string;
+  sellerEmail: string;
+}
+
+export default function ContactSection({
+  sellerName,
+  sellerEmail,
+}: ContactSectionProps) {
   return (
     <div
       style={{

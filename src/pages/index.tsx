@@ -8,8 +8,28 @@ import styles from "@/styles/Home.module.css";
 import data from "../../data/seed.json";
 import CreateListing from "../components/CreateListing";
 
+export interface Listing {
+  id: number;
+  title: string;
+  price: number;
+  details: string;
+  picture: string;
+  seller: string;
+  category: string;
+  subCategory: string;
+  color: string;
+  size: string;
+  condition: string;
+  gender: string;
+}
+
 export default function Home() {
-  const [collection, setCollection] = useState(data);
+  const [collection, setCollection] = useState<Listing[]>(
+    (data as any[]).map((item) => ({
+      ...item,
+      subCategory: item["sub-category"],
+    })),
+  );
   const [createListing, setCreateListing] = useState(false);
 
   return (
