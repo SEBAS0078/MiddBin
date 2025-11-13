@@ -13,7 +13,6 @@ export default function ListingDetail({ listing }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-950 to-indigo-900 text-white p-8">
       <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-        {/* --- Image --- */}
         <div>
           <img
             src={listing.image || "/placeholder.png"}
@@ -22,7 +21,6 @@ export default function ListingDetail({ listing }) {
           />
         </div>
 
-        {/* --- Info --- */}
         <div className="flex flex-col justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">{listing.title}</h1>
@@ -41,7 +39,6 @@ export default function ListingDetail({ listing }) {
             <p className="text-gray-200 mt-4">{listing.description}</p>
           </div>
 
-          {/* --- Contact Seller Section --- */}
           <ContactSection
             sellerName={listing.sellerName || "Unknown Seller"}
             sellerEmail={listing.sellerEmail || "example@middlebury.edu"}

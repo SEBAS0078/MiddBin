@@ -6,7 +6,6 @@ export default function ListingPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  // find item by id from your seed.json
   const listing = data.find((item) => item.id === Number(id));
 
   if (!listing) {
