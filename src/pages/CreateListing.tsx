@@ -1,23 +1,10 @@
 import { useRouter } from "next/router";
 import type { FormEvent } from "react";
 import { useState } from "react";
+import type { Listing } from "@/types/Listing";
 import Navbar from "../components/Navbar";
 import { addListing } from "../lib/db_functions";
 import styles from "../styles/CreateListing.module.css";
-
-type Listing = {
-  title: string; // required
-  description?: string; // optional, defaults to ""
-  img: string; // required (picture URL)
-  price: number; // required
-  category?: string; // optional, defaults to ""
-  subCategory?: string; // optional, defaults to ""
-  color?: string; // optional, defaults to ""
-  size?: string; // optional, defaults to ""
-  condition?: string; // optional, defaults to ""
-  gender?: string; // optional, defaults to ""
-  created?: string; // auto-set timestamp
-};
 
 export default function CreateListing() {
   const router = useRouter();
@@ -62,6 +49,7 @@ export default function CreateListing() {
     }
 
     const listing: Listing = {
+      id: 0,
       title: title, // required
       description: description || "", // default empty
       price: price, // required
