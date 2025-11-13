@@ -1,4 +1,7 @@
-import Image from "next/image";
+// biome-ignore-all lint/performance/noImgElement:temporary fix to allow <img> usage in this file
+
+//import Image from "next/image";
+
 import styles from "../styles/ListingCard.module.css";
 
 type Listing = {
@@ -22,7 +25,7 @@ type ListingCardProps = {
 export default function ListingCard({ item }: ListingCardProps) {
   return (
     <div className={styles.card}>
-      <Image src={item.img} alt={item.title} className={styles.image} />
+      <img src={item.img} alt={item.title} className={styles.image} />
       <h3 className={styles.title}>{item.title}</h3>
       <p className={styles.price}>${item.price}</p>
       <p className={styles.condition}>Condition: {item.condition}</p>

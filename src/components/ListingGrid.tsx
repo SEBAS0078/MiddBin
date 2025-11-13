@@ -2,10 +2,10 @@ import { useState } from "react";
 import ListingCard from "@/components/ListingCard";
 import SearchBar from "@/components/SearchBar";
 import styles from "@/styles/Home.module.css";
-import type { Listing } from "../types/Listing";
+import type { Listing } from "@/types/Listing";
 
 type ListingGridProps = {
-  collection?: Listing[];
+  collection: Listing[];
 };
 
 export default function ListingGrid({ collection = [] }: ListingGridProps) {
