@@ -56,6 +56,7 @@ export default function Home() {
               height={100}
             />
           </div>
+
           <h1>MiddBin</h1>
           <p>A Market place for Middlebury college students</p>
 
@@ -64,6 +65,7 @@ export default function Home() {
           </Link>
           <ListingGrid collection={collection} />
         </main>
+
         <footer className={styles.footer}>CS312 Project Template</footer>
       </div>
     </>

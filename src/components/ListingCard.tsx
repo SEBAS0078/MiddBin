@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "../styles/ListingCard.module.css";
 
 type Listing = {
@@ -25,6 +26,6 @@ export default function ListingCard({ item }: ListingCardProps) {
       <h3 className={styles.title}>{item.title}</h3>
       <p className={styles.price}>${item.price}</p>
       <p className={styles.condition}>Condition: {item.condition}</p>
-    </div>
+    </Link>
   );
 }
