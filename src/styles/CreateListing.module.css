@@ -12,8 +12,6 @@
   width: calc(100% - 3rem); /* space from page edges */
 }
 
-.formContainer:hover {
-}
 .inputLabel {
   display: flex;
   flex-direction: column;
