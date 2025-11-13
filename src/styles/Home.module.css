@@ -31,6 +31,8 @@
   flex-direction: column;
   gap: 32px;
   grid-row-start: 2;
+  justify-content: center; /* centers vertically (along main axis) */
+  align-items: center;
 }
 
 .main ol {
@@ -181,15 +183,15 @@ body {
   align-items: center; /* vertically center items */
   justify-content: center;
   padding: 0.9rem 1.8rem;
-  border-radius: 0.75rem;
-  font-size: 1.1rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: white;
   cursor: pointer;
   letter-spacing: 0.5px;
 
   /* Glass & gradient style */
-  background: linear-gradient(135deg, #1e3c72, #2a0845);
+  background: linear-gradient(135deg, #184fb3, #8ee3ef);
   background-clip: padding-box;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 15px rgba(0, 0, 80, 0.4);
@@ -200,7 +202,7 @@ body {
 .createButton:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 0 25px rgba(100, 150, 255, 0.5);
-  background: linear-gradient(135deg, #2a0845, #1e3c72);
+  background: linear-gradient(135deg, #8ee3ef, #184fb3);
 }
 
 .createButton:active {
@@ -301,4 +303,36 @@ body {
 .searchWrapper label,
 .filters label {
   color: #ffffff;
+}
+
+.searchButton {
+  display: flex; /* enable flexbox */
+  align-items: center; /* vertically center items */
+  justify-content: center;
+  padding: 0.7rem 1.5rem;
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  /* Glass & gradient style */
+  background: #8ee4efc0;
+  background-clip: padding-box;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.searchButton:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.searchButton:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 0 10px rgba(80, 120, 255, 0.4);
+}
+
+.searchButton:focus {
+  outline: none;
+  border: 1px solid rgba(96, 98, 100, 0.5);
 }
