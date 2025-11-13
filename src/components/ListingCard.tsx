@@ -1,22 +1,28 @@
 import Link from "next/link";
 import styles from "../styles/ListingCard.module.css";
 
-export interface ListingItem {
-  id: number;
-  title: string;
-  price: number;
-  condition: string;
-  picture: string;
-}
+type Listing = {
+  title: string; // required
+  description?: string; // optional, defaults to ""
+  img: string; // required (picture URL)
+  price: number; // required
+  category?: string; // optional, defaults to ""
+  subCategory?: string; // optional, defaults to ""
+  color?: string; // optional, defaults to ""
+  size?: string; // optional, defaults to ""
+  condition?: string; // optional, defaults to ""
+  gender?: string; // optional, defaults to ""
+  created?: string; // auto-set timestamp
+};
 
-interface ListingCardProps {
-  item: ListingItem;
-}
+type ListingCardProps = {
+  item: Listing;
+};
 
 export default function ListingCard({ item }: ListingCardProps) {
   return (
-    <Link href={`/listing/${item.id}`} className={styles.card}>
-      <img src={item.picture} alt={item.title} className={styles.image} />
+    <div className={styles.card}>
+      <img src={item.img} alt={item.title} className={styles.image} />
       <h3 className={styles.title}>{item.title}</h3>
       <p className={styles.price}>${item.price}</p>
       <p className={styles.condition}>Condition: {item.condition}</p>
