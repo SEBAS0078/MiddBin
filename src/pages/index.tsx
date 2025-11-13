@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+
 import ListingGrid from "@/components/ListingGrid";
 import styles from "@/styles/Home.module.css";
 import data from "../../data/seed.json";
@@ -37,6 +38,7 @@ export default function Home() {
         <title>MiddBin</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <nav>
         <ul className={styles.navBar}>
           <li className={styles.navItem}>
@@ -56,6 +58,7 @@ export default function Home() {
           </li>
         </ul>
       </nav>
+
       <div className={styles.page}>
         <main className={styles.main}>
           <div className={styles.logoWrapper}>
@@ -66,8 +69,10 @@ export default function Home() {
               height={100}
             />
           </div>
+
           <h1>MiddBin</h1>
-          <p>A Market place for Middlebury college students</p>
+          <p>A marketplace for Middlebury College students</p>
+
           {!createListing && (
             <button
               type="button"
@@ -77,6 +82,7 @@ export default function Home() {
               Create Listing!
             </button>
           )}
+
           {createListing && (
             <CreateListing
               collection={collection}
@@ -84,8 +90,10 @@ export default function Home() {
               setCreateListing={setCreateListing}
             />
           )}
+
           <ListingGrid collection={collection} />
         </main>
+
         <footer className={styles.footer}>CS312 Project Template</footer>
       </div>
     </>
