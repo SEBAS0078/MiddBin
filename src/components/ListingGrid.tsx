@@ -2,20 +2,8 @@ import { useState } from "react";
 import ListingCard from "@/components/ListingCard";
 import SearchBar from "@/components/SearchBar";
 import styles from "@/styles/Home.module.css";
+import type { Listing } from "../types/Listing";
 
-type Listing = {
-  title: string; // required
-  description?: string; // optional, defaults to ""
-  img: string; // required (picture URL)
-  price: number; // required
-  category?: string; // optional, defaults to ""
-  subCategory?: string; // optional, defaults to ""
-  color?: string; // optional, defaults to ""
-  size?: string; // optional, defaults to ""
-  condition?: string; // optional, defaults to ""
-  gender?: string; // optional, defaults to ""
-  created?: string; // auto-set timestamp
-};
 type ListingGridProps = {
   collection?: Listing[];
 };
@@ -128,7 +116,7 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
 
       <div className={styles.listingGrid}>
         {filteredListings.map((listing) => (
-          <ListingCard key={listing.title} item={listing} />
+          <ListingCard key={listing.id} item={listing} />
         ))}
         {filteredListings.length === 0 && <p>No listings found.</p>}
       </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import ContactSection from "./ContactSection";
 
 export default function ListingDetail({ listing }) {
@@ -14,7 +13,7 @@ export default function ListingDetail({ listing }) {
     <div className="min-h-screen bg-gradient-to-b from-indigo-950 to-indigo-900 text-white p-8">
       <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
         <div>
-          <img
+          <Image
             src={listing.image || "/placeholder.png"}
             alt={listing.title}
             className="w-full h-96 object-cover rounded-xl border border-indigo-700"

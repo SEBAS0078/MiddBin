@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Image from "next/image";
 import styles from "../styles/ListingCard.module.css";
 
 type Listing = {
@@ -22,10 +22,10 @@ type ListingCardProps = {
 export default function ListingCard({ item }: ListingCardProps) {
   return (
     <div className={styles.card}>
-      <img src={item.img} alt={item.title} className={styles.image} />
+      <Image src={item.img} alt={item.title} className={styles.image} />
       <h3 className={styles.title}>{item.title}</h3>
       <p className={styles.price}>${item.price}</p>
       <p className={styles.condition}>Condition: {item.condition}</p>
-    </Link>
+    </div>
   );
 }

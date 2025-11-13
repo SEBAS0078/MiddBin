@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ContactSectionProps {
   sellerName: string;
   sellerEmail: string;

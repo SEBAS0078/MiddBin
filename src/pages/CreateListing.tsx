@@ -86,7 +86,7 @@ export default function CreateListing() {
 
       alert("✅ Listing created successfully!");
       router.back(); // navigate back after success
-    } catch (err) {
+    } catch (_err) {
       //console.error("Unexpected error:", err);
       alert("❌ Something went wrong.");
     }
@@ -216,46 +216,48 @@ export default function CreateListing() {
               ))}
             </select>
           </div>
-
-          <div className={styles.inputLabel}>
-            <label htmlFor="color" className={styles.label}>
-              Color
-            </label>
-            <select
-              id="color"
-              className={styles.title}
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-            >
-              <option value="">Select color</option>
-              <option value="blue">Blue</option>
-              <option value="black">Black</option>
-              <option value="white">White</option>
-              <option value="green">Green</option>
-              <option value="red">Red</option>
-              <option value="gray">Gray</option>
-              <option value="yellow">Yellow</option>
-            </select>
-          </div>
-
-          <div className={styles.inputLabel}>
-            <label htmlFor="size" className={styles.label}>
-              Size
-            </label>
-            <select
-              id="size"
-              className={styles.title}
-              value={size}
-              onChange={(e) => setSize(e.target.value)}
-            >
-              <option value="">Select size</option>
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-            </select>
-          </div>
+          {category === "clothing" ? (
+            <div className={styles.inputLabel}>
+              <label htmlFor="color" className={styles.label}>
+                Color
+              </label>
+              <select
+                id="color"
+                className={styles.title}
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+              >
+                <option value="">Select color</option>
+                <option value="blue">Blue</option>
+                <option value="black">Black</option>
+                <option value="white">White</option>
+                <option value="green">Green</option>
+                <option value="red">Red</option>
+                <option value="gray">Gray</option>
+                <option value="yellow">Yellow</option>
+              </select>
+            </div>
+          ) : null}
+          {category === "clothing" ? (
+            <div className={styles.inputLabel}>
+              <label htmlFor="size" className={styles.label}>
+                Size
+              </label>
+              <select
+                id="size"
+                className={styles.title}
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+              >
+                <option value="">Select size</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+            </div>
+          ) : null}
 
           <div className={styles.inputLabel}>
             <label htmlFor="condition" className={styles.label}>
@@ -275,23 +277,24 @@ export default function CreateListing() {
               <option value="used">Used</option>
             </select>
           </div>
-
-          <div className={styles.inputLabel}>
-            <label htmlFor="gender" className={styles.label}>
-              Gender
-            </label>
-            <select
-              id="gender"
-              className={styles.title}
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <option value="">Select gender</option>
-              <option value="unisex">Unisex</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
+          {category === "clothing" ? (
+            <div className={styles.inputLabel}>
+              <label htmlFor="gender" className={styles.label}>
+                Gender
+              </label>
+              <select
+                id="gender"
+                className={styles.title}
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <option value="">Select gender</option>
+                <option value="unisex">Unisex</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+          ) : null}
         </div>
 
         <div className={styles.buttonContainer}>
