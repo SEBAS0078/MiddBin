@@ -45,3 +45,13 @@ export async function addListing(listing: Listing) {
 
   return { data, error };
 }
+
+export async function deleteListing(id: string) {
+  const { data, error } = await supabase
+    .from("Listings")
+    .delete()
+    .eq("id", id)
+    .select();
+
+  return { data, error };
+}

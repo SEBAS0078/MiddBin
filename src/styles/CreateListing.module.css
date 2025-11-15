@@ -125,3 +125,30 @@ select:focus {
     0 0 20px #2200ff,
     0 0 40px #00fbff88;
 }
+
+.title option {
+  background-color: #1f0b59;
+  color: white;
+}
+.title optgroup {
+  background-color: #1f0b59;
+  color: white;
+}
+
+.clothingWrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-8px);
+  transition:
+    max-height 0.4s ease,
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+/* When Clothing is selected */
+.show {
+  max-height: 500px; /* big enough to fit all fields */
+  opacity: 1;
+  transform: translateY(0);
+}

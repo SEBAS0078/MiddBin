@@ -1,3 +1,4 @@
+//biome-ignore-all lint/style/useNamingConvention: uppercase names
 import { useRouter } from "next/router";
 import type { FormEvent } from "react";
 import { useState } from "react";
@@ -21,24 +22,34 @@ export default function CreateListing() {
   const [gender, setGender] = useState<string>("");
 
   const availableCategories = [
-    "furniture",
-    "electronics",
-    "clothing",
-    "books",
-    "dorm",
-    "tickets",
-    "transportation",
-    "free",
+    "Furniture",
+    "Electronics",
+    "Clothing",
+    "Books",
+    "Dorm",
+    "Tickets",
+    "Transportation",
+    "Free",
+    "Other",
   ];
+
   const availableSubcategories: Record<string, string[]> = {
-    furniture: ["Desk", "Chair", "Bed Frame", "Couch", "Dresser"],
-    electronics: ["Laptop", "Headphones", "Phone", "Monitor", "Speakers"],
-    clothing: ["Shirt", "Pants", "Jacket", "Shoes", "Accessories"],
-    books: ["Textbooks", "Novels", "Course Readers", "Comics"],
-    dorm: ["Mini Fridge", "Lamp", "Storage Bins", "Rug", "Decor"],
-    tickets: ["Concert", "Sports", "Theater", "Student Events"],
-    transportation: ["Bike", "Skateboard", "Carpool", "Scooter"],
-    free: ["Miscellaneous", "Giveaways", "Leftovers"],
+    Furniture: ["Desk", "Chair", "Bed Frame", "Couch", "Dresser", "Other"],
+    Electronics: [
+      "Laptop",
+      "Headphones",
+      "Phone",
+      "Monitor",
+      "Speakers",
+      "Other",
+    ],
+    Clothing: ["Shirt", "Pants", "Jacket", "Shoes", "Accessories", "Other"],
+    Books: ["Textbooks", "Novels", "Course Readers", "Comics", "Other"],
+    Dorm: ["Mini Fridge", "Lamp", "Storage Bins", "Rug", "Decor", "Other"],
+    Tickets: ["Concert", "Sports", "Theater", "Student Events", "Other"],
+    Transportation: ["Bike", "Skateboard", "Carpool", "Scooter", "Other"],
+    Free: ["Miscellaneous", "Giveaways", "Leftovers", "Other"],
+    Other: ["Other"],
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -204,7 +215,30 @@ export default function CreateListing() {
               ))}
             </select>
           </div>
-          {category === "clothing" ? (
+          <div className={styles.inputLabel}>
+            <label htmlFor="condition" className={styles.label}>
+              Condition
+            </label>
+            <select
+              id="condition"
+              className={styles.title}
+              value={condition}
+              onChange={(e) => setCondition(e.target.value)}
+            >
+              <option value="">Select condition</option>
+              <option value="New">New</option>
+              <option value="Like New">Like New</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+              <option value="Used">Used</option>
+            </select>
+          </div>
+
+          <div
+            className={`${styles.clothingWrapper} ${
+              category === "Clothing" ? styles.show : ""
+            }`}
+          >
             <div className={styles.inputLabel}>
               <label htmlFor="color" className={styles.label}>
                 Color
@@ -225,47 +259,67 @@ export default function CreateListing() {
                 <option value="yellow">Yellow</option>
               </select>
             </div>
-          ) : null}
-          {category === "clothing" ? (
+
             <div className={styles.inputLabel}>
               <label htmlFor="size" className={styles.label}>
                 Size
               </label>
-              <select
-                id="size"
-                className={styles.title}
-                value={size}
-                onChange={(e) => setSize(e.target.value)}
-              >
-                <option value="">Select size</option>
-                <option value="XS">XS</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-              </select>
-            </div>
-          ) : null}
+              {subCategory !== "Shoes" ? (
+                <select
+                  id="size"
+                  className={styles.title}
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
+                >
+                  <option value="">Select size</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                </select>
+              ) : (
+                <select
+                  id="size"
+                  className={styles.title}
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
+                >
+                  <option value="">Select shoe size</option>
 
-          <div className={styles.inputLabel}>
-            <label htmlFor="condition" className={styles.label}>
-              Condition
-            </label>
-            <select
-              id="condition"
-              className={styles.title}
-              value={condition}
-              onChange={(e) => setCondition(e.target.value)}
-            >
-              <option value="">Select condition</option>
-              <option value="new">New</option>
-              <option value="like new">Like New</option>
-              <option value="good">Good</option>
-              <option value="fair">Fair</option>
-              <option value="used">Used</option>
-            </select>
-          </div>
-          {category === "clothing" ? (
+                  <optgroup label="Men's US">
+                    <option value="6">6</option>
+                    <option value="6.5">6.5</option>
+                    <option value="7">7</option>
+                    <option value="7.5">7.5</option>
+                    <option value="8">8</option>
+                    <option value="8.5">8.5</option>
+                    <option value="9">9</option>
+                    <option value="9.5">9.5</option>
+                    <option value="10">10</option>
+                    <option value="10.5">10.5</option>
+                    <option value="11">11</option>
+                    <option value="11.5">11.5</option>
+                    <option value="12">12</option>
+                  </optgroup>
+
+                  <optgroup label="Women's US">
+                    <option value="5">5</option>
+                    <option value="5.5">5.5</option>
+                    <option value="6">6</option>
+                    <option value="6.5">6.5</option>
+                    <option value="7">7</option>
+                    <option value="7.5">7.5</option>
+                    <option value="8">8</option>
+                    <option value="8.5">8.5</option>
+                    <option value="9">9</option>
+                    <option value="9.5">9.5</option>
+                    <option value="10">10</option>
+                  </optgroup>
+                </select>
+              )}
+            </div>
+
             <div className={styles.inputLabel}>
               <label htmlFor="gender" className={styles.label}>
                 Gender
@@ -282,7 +336,7 @@ export default function CreateListing() {
                 <option value="female">Female</option>
               </select>
             </div>
-          ) : null}
+          </div>
         </div>
 
         <div className={styles.buttonContainer}>
