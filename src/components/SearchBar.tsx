@@ -29,7 +29,7 @@ export default function SearchBar({ search }: SearchBarProps) {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
-      <button className={styles.createButton} type="button" onClick={doSearch}>
+      <button className={styles.searchButton} type="button" onClick={doSearch}>
         Search
       </button>
     </div>
