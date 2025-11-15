@@ -1,0 +1,8 @@
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
+
+const supabaseUrl: string = process.env.NEXT_PUBLIC_SUPABASE_GOOGLE_URL!;
+const supabaseKey: string = process.env.NEXT_PUBLIC_SUPABASE_GOOGLE_ANON_KEY!;
+
+export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
+
+

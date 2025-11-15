@@ -7,7 +7,7 @@ import styles from "@/styles/Home.module.css";
 import Navbar from "../components/Navbar";
 import { fetchListings } from "../lib/db_functions";
 import { supabase } from "../lib/login.supabase";
-import { Listing } from "@/types/Listing";
+import type { Listing } from "../types/Listing";
 
 export default function Home() {
   const [collection, setCollection] = useState<Listing[]>([]);
