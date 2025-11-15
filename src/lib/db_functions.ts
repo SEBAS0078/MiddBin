@@ -1,18 +1,5 @@
 import { supabase } from "@/lib/supabase_client";
-
-type Listing = {
-  title: string; // required
-  description?: string; // optional, defaults to ""
-  img: string; // required (picture URL)
-  price: number; // required
-  category?: string; // optional, defaults to ""
-  subCategory?: string; // optional, defaults to ""
-  color?: string; // optional, defaults to ""
-  size?: string; // optional, defaults to ""
-  condition?: string; // optional, defaults to ""
-  gender?: string; // optional, defaults to ""
-  created?: string; // auto-set timestamp
-};
+import type { Listing } from "../types/Listing";
 
 export async function fetchListings() {
   const { error, data } = await supabase.from("Listings").select("*");
@@ -23,6 +10,20 @@ export async function fetchListings() {
   }
 
   return { error: null, data: data ?? [] };
+}
+
+export async function fetchListingById(id: string | string[] | undefined) {
+  const { error, data } = await supabase
+    .from("Listings")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) {
+    alert("Error fetching listing:");
+    return { error, data: null };
+  } else {
+    return { error: null, data };
+  }
 }
 
 export async function addListing(listing: Listing) {
