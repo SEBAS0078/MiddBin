@@ -14,6 +14,13 @@
   padding: 80px;
   font-family: var(--font-geist-sans);
 }
+.pageContent {
+  width: 100%; /* full width of page or max-width */
+  max-width: 1200px; /* prevents the content from stretching too wide */
+  margin: 0 auto; /* center horizontally */
+  padding: 0 16px; /* some padding on small screens */
+  box-sizing: border-box;
+}
 
 @media (prefers-color-scheme: dark) {
   .page {
@@ -251,12 +258,31 @@ body {
   color: #bafaff;
 }
 
-.listingGrid {
+/*.listingGrid {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: left;
   margin-top: 40px;
+}*/
+
+.listingGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* mobile default */
+  gap: 20px;
+  margin-top: 40px;
+}
+
+@media (min-width: 768px) {
+  .listingGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .listingGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .searchWrapper {

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import * as Slider from "@radix-ui/react-slider";
+import { useEffect, useState } from "react";
 import ListingCard from "@/components/ListingCard";
 import SearchBar from "@/components/SearchBar";
 import styles from "@/styles/Home.module.css";
@@ -9,30 +10,31 @@ type ListingGridProps = {
 };
 
 export default function ListingGrid({ collection = [] }: ListingGridProps) {
-  const [currentPrice, setCurrentPrice] = useState<string>("");
   const [currentCat, setCurrentCat] = useState<string>("");
   const [currentColor, setCurrentColor] = useState<string>("");
   const [query, setQuery] = useState<string>("");
 
-  const catPrice = [
-    ...new Set(
-      collection.map((i: Listing) => {
-        if (i.price > 100) return "100+";
-        else if (i.price > 50) return "50-99";
-        else if (i.price > 20) return "20-49";
-        else return "0-19";
-      }),
-    ),
-  ];
+  const prices = collection.map((i: Listing) => Math.floor(i.price));
+
+  const minPrice = prices.length > 0 ? Math.floor(Math.min(...prices)) : 0;
+  const maxPrice = prices.length > 0 ? Math.ceil(Math.max(...prices)) : 0;
+
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    minPrice,
+    maxPrice,
+  ]);
+
+  useEffect(() => {
+    if (collection.length > 0) {
+      const prices = collection.map((i) => Math.floor(i.price));
+      const minPrice = Math.floor(Math.min(...prices));
+      const maxPrice = Math.ceil(Math.max(...prices));
+      setPriceRange([minPrice, maxPrice]);
+    }
+  }, [collection]);
+
   const catCategory = [...new Set(collection.map((i: Listing) => i.category))];
   const catColor = [...new Set(collection.map((i: Listing) => i.color))];
-
-  const priceInRange = (price: number): string => {
-    if (price >= 100) return "100+";
-    else if (price >= 50) return "50-99";
-    else if (price >= 20) return "20-49";
-    else return "0-19";
-  };
 
   const filteredListings = collection.filter((item) => {
     return (
@@ -45,30 +47,78 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
         (item.price?.toString().includes(query) ?? false)) &&
       (currentCat === "" || item.category === currentCat) &&
       (currentColor === "" || item.color === currentColor) &&
-      (currentPrice === "" || priceInRange(item.price) === currentPrice)
+      (priceRange[0] === null ||
+        priceRange[1] === null ||
+        (item.price >= priceRange[0] && item.price <= priceRange[1]))
     );
   });
 
   return (
-    <div>
+    <div className={styles.pageContent}>
       <SearchBar search={setQuery} />
 
       <div className={styles.filters}>
-        <div>
-          <label htmlFor="price">Price</label>
-          <select
-            onChange={(e) => setCurrentPrice(e.target.value)}
-            id="price"
-            value={currentPrice}
+        <div style={{ padding: 40 }}>
+          <p>
+            Price: ${priceRange[0]} - ${priceRange[1]}
+          </p>
+          <Slider.Root
+            value={priceRange}
+            onValueChange={(val) => setPriceRange(val as [number, number])}
+            min={minPrice}
+            max={maxPrice}
+            step={1}
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              width: 300,
+              height: 30,
+            }}
           >
-            <option value="">All</option>
-            {catPrice.map((price) => (
-              <option key={price} value={price}>
-                {price}
-              </option>
-            ))}
-          </select>
+            <Slider.Track
+              style={{
+                background: "#ccc",
+                position: "relative",
+                flexGrow: 1,
+                height: 4,
+                borderRadius: 2,
+              }}
+            >
+              <Slider.Range
+                style={{
+                  background: "blue",
+                  position: "absolute",
+                  height: "100%",
+                  borderRadius: 2,
+                }}
+              />
+            </Slider.Track>
+            <Slider.Thumb
+              style={{
+                display: "block",
+                width: 16,
+                height: 16,
+                background: "white",
+                border: "2px solid black",
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+            />
+            <Slider.Thumb
+              style={{
+                display: "block",
+                width: 16,
+                height: 16,
+                background: "white",
+                border: "2px solid black",
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+            />
+          </Slider.Root>
         </div>
+
         <div>
           <label htmlFor="category">Category</label>
           <select
@@ -103,7 +153,7 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
           <button
             type="button"
             onClick={() => {
-              setCurrentPrice("");
+              setPriceRange([minPrice, maxPrice]);
               setCurrentCat("");
               setCurrentColor("");
               setQuery("");
