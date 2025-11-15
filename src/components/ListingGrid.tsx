@@ -151,6 +151,7 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
         </div>
         <div>
           <button
+            className={styles.clearButton}
             type="button"
             onClick={() => {
               setPriceRange([minPrice, maxPrice]);

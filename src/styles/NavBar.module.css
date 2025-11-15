@@ -1,13 +1,18 @@
 /* Navigation Bar stuff */
-
 .navBar {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  list-style-type: none;
-  background-color: #2f58fa;
-  border-style: solid;
-  border-color: #2f58fa;
+  background-color: #f0f0f5;
+  padding: 10px 12px; /* slightly larger padding */
+  width: 100%; /* ensures full-width background */
+  box-sizing: border-box; /* prevents any overflow issues */
+  align-items: center;
+  list-style: none;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 999;
 }
 
 .navItem {
@@ -16,15 +21,18 @@
 
 .navLink {
   font-size: 15px;
-  color: #7dcfff;
+  color: #000000;
   padding: 14px 16px;
   text-decoration: none;
   text-transform: uppercase;
   font-weight: bold;
   display: inline-block;
+  border-radius: 10px;
+  transition: all 0.1s ease-in-out;
+  border: solid 1px rgba(0, 0, 0, 0);
 }
 
 .navLink:hover {
-  background-color: #bafaff;
-  color: white;
+  background: rgba(0, 0, 0, 0.071);
+  box-shadow: 0 0 3px black;
 }

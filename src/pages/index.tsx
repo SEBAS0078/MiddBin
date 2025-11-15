@@ -6,23 +6,22 @@ import ListingGrid from "@/components/ListingGrid";
 import styles from "@/styles/Home.module.css";
 import Navbar from "../components/Navbar";
 import { fetchListings } from "../lib/db_functions";
-import { supabase } from "../lib/login.supabase";
-import type { Listing } from "../types/Listing";
+// import { supabase } from "../lib/login.supabase";
 
 export default function Home() {
   const [collection, setCollection] = useState<Listing[]>([]);
-async function signInWithGoogle() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "http://localhost:3000/auth/callback",
-      },
-    });
+  // async function signInWithGoogle() {
+  //     const { data, error } = await supabase.auth.signInWithOAuth({
+  //       provider: "google",
+  //       options: {
+  //         redirectTo: "http://localhost:3000/auth/callback",
+  //       },
+  //     });
 
-    if (error) {
-      console.error("Google login error:", error);
-    }
-  }
+  //     if (error) {
+  //       console.error("Google login error:", error);
+  //     }
+  //   }
 
   useEffect(() => {
     async function loadListings() {
@@ -51,19 +50,18 @@ async function signInWithGoogle() {
           <div className={styles.logoWrapper}>
             <Image
               src="/MiddBinLogo.jpeg"
-              alt="MiddBin Logo" 
-              width={100}
-              height={100}
+              alt="MiddBin Logo"
+              width={150}
+              height={150}
             />
           </div>
 
           <h1>MiddBin</h1>
           <p>A Market place for Middlebury college students</p>
 
-          <button onClick={signInWithGoogle} className={styles.createButton}>
+          {/* <button onClick={signInWithGoogle} className={styles.createButton}>
             Login with Google
-          </button>
-
+          </button> */}
 
           <Link className={styles.createButton} href="/CreateListing">
             Create Listing!
@@ -71,7 +69,7 @@ async function signInWithGoogle() {
           <ListingGrid collection={collection} />
         </main>
 
-        <footer className={styles.footer}>CS312 Project Template</footer>
+        <footer className={styles.footer}>CS312 Fall 2025 Project</footer>
       </div>
     </>
   );
