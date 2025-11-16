@@ -11,4 +11,5 @@ export type Listing = {
   condition?: string; // optional, defaults to ""
   gender?: string; // optional, defaults to ""
   created?: string; // auto-set timestamp
+  sellerId?: string;
 };
