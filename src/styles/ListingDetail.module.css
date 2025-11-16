@@ -32,3 +32,15 @@
   color: #bdbdbd;
   letter-spacing: 0.5px;
 }
+
+.ListingDetail {
+  width: 420px;
+  height: 420px;
+  object-fit: contain;
+  background-color: #111827;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: block;
+  margin: 0 auto;
+}
