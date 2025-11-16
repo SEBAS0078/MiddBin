@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Login from "@/components/Login";
 import styles from "@/styles/NavBar.module.css";
 
 export default function Navbar() {
@@ -20,6 +21,9 @@ export default function Navbar() {
             <Link href="/contact" className={styles.navLink}>
               Contact
             </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Login />
           </li>
         </ul>
       </nav>
