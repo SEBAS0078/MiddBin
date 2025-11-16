@@ -43,8 +43,7 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
         (item.description?.toLowerCase().includes(query.toLowerCase()) ??
           false) ||
         (item.category?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
-        (item.color?.toLowerCase().includes(query.toLowerCase()) ?? false) ||
-        (item.price?.toString().includes(query) ?? false)) &&
+        (item.color?.toLowerCase().includes(query.toLowerCase()) ?? false)) &&
       (currentCat === "" || item.category === currentCat) &&
       (currentColor === "" || item.color === currentColor) &&
       (priceRange[0] === null ||
