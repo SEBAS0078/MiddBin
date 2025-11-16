@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import styles from "@/styles/ListingDetail.module.css";
 import type { Listing } from "@/types/Listing";
 import ContactSection from "./ContactSection";
@@ -7,6 +8,8 @@ interface ListingDetailProps {
 }
 
 export default function ListingDetail({ listing }: ListingDetailProps) {
+  const router = useRouter();
+
   if (!listing) {
     return (
       <div className="text-center tet-gray-400 mt-10">No listing selected.</div>
@@ -15,11 +18,20 @@ export default function ListingDetail({ listing }: ListingDetailProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-950 to-indigo-900 text-white p-8">
+      <button
+        type="button"
+        className="mb-6 text-indigo-300 hover:text-white underline"
+        onClick={() => router.back()}
+      >
+        ← Back to Listings
+      </button>
       <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
         <div>
           <img
             src={listing.img}
             alt={listing.title}
+            width={420}
+            height={420}
             className={styles.ListingDetail}
           />
         </div>
