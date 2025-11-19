@@ -1,8 +1,4 @@
-import type { User } from "@supabase/supabase-js";
-import { useCallback, useEffect, useState } from "react";
-import useUser, { useUserContext } from "@/hooks/useUser";
-import { supabase } from "@/lib/supabase_client";
-import App from "@/pages/_app";
+import { useUserContext } from "@/hooks/useUser";
 
 export default function LoginStatus() {
   const { user, signIn, signOut, error } = useUserContext();

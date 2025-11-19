@@ -1,34 +1,160 @@
-.image {
-  width: 50%;
-  height: 180px;
-  border-radius: 0.75rem;
-  object-fit: contain;
-  margin-bottom: 1rem;
-  transition: transform 0.3s ease;
+.page {
+  min-height: 100vh;
+  padding: 3rem 1.5rem;
+  background: radial-gradient(
+    circle at top,
+    #1e293b 0,
+    #020617 55%,
+    #020617 100%
+  );
+  color: #f9fafb;
 }
 
-.content {
-  text-align: center;
+/* outer card */
+.card {
+  max-width: 960px;
+  margin: 0 auto;
+  background: rgba(15, 23, 42, 0.96);
+  border-radius: 1.5rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .card {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+/* image side */
+.imageCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  display: block;
   width: 100%;
+  max-width: 420px;
+  max-height: 420px;
+  height: auto;
+  border-radius: 0.9rem;
+  object-fit: cover;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* info side */
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* title + price + edit button row */
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  color: #ffffff;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
-}
-
-.price {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #8bdcff;
+  font-size: clamp(1.6rem, 2vw + 1rem, 2.3rem);
+  font-weight: 700;
   margin-bottom: 0.25rem;
 }
 
-.condition {
-  font-size: 0.9rem;
-  color: #bdbdbd;
-  letter-spacing: 0.5px;
+.price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #7dd3fc;
+}
+
+/* small chips for metadata */
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.8);
+  color: #e5e7eb;
+}
+
+/* description text */
+.description {
+  margin-top: 0.25rem;
+  line-height: 1.6;
+  color: #e5e7eb;
+  font-size: 0.95rem;
+}
+
+/* edit button */
+.editButton {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(to right, #22c55e, #14b8a6);
+  color: #020617;
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35);
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease;
+}
+
+.editButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(34, 197, 94, 0.45);
+}
+
+.editButton:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.35);
+}
+/* section label above description */
+.section {
+  margin-top: 0.75rem;
+}
+
+.sectionTitle {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-bottom: 0.3rem;
+}
+
+/* tweak description to sit under that label */
+.description {
+  line-height: 1.6;
+  color: #e5e7eb;
+  font-size: 0.95rem;
+}
+
+/* small contact card pinned to bottom-right of infoCol */
+.contactCard {
+  margin-top: auto; /* push it to the bottom of the column */
+  align-self: flex-end; /* hug the right edge */
+  max-width: 260px;
+  width: 100%;
+  border-radius: 0.9rem;
+  padding: 0.9rem 1rem;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.55);
 }

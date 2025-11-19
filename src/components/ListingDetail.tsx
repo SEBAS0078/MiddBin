@@ -1,5 +1,8 @@
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useUserContext } from "@/hooks/useUser";
 import styles from "@/styles/ListingDetail.module.css";
-import type { Listing } from "@/types/Listing";
+import type { Listing } from "@/types";
 import ContactSection from "./ContactSection";
 
 interface ListingDetailProps {
@@ -7,51 +10,79 @@ interface ListingDetailProps {
 }
 
 export default function ListingDetail({ listing }: ListingDetailProps) {
+  const router = useRouter();
+  const { user } = useUserContext();
+
   if (!listing) {
     return (
-      <div className="text-center tet-gray-400 mt-10">No listing selected.</div>
+      <div className="min-h-screen flex items-center justify-center text-gray-400">
+        Listing not found.
+      </div>
     );
   }
 
+  const isOwner = user?.id === listing.seller_id;
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-950 to-indigo-900 text-white p-8">
-      <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-        <div>
-          <img
+    <div className={styles.page}>
+      <div className={styles.card}>
+        {/* IMAGE COLUMN */}
+        <div className={styles.imageCol}>
+          <Image
             src={listing.img}
             alt={listing.title}
-            className={styles.ListingDetail}
+            className={styles.image}
+            width={800}
+            height={600}
+            unoptimized
           />
         </div>
 
-        <div className="flex flex-col justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">{listing.title}</h1>
-            <p className="text-xl text-indigo-300 mb-4">${listing.price}</p>
+        {/* INFO COLUMN */}
+        <div className={styles.infoCol}>
+          {/* Title + price + edit button */}
+          <div className={styles.headerRow}>
+            <div>
+              <h1 className={styles.title}>{listing.title}</h1>
+              <p className={styles.price}>${listing.price}</p>
+            </div>
 
-            {listing.category && (
-              <p className="text-sm text-gray-300 mb-2">
-                Condition: <span>{listing.condition}</span>
-              </p>
+            {isOwner && (
+              <button
+                type="button"
+                onClick={() => router.push(`/listing/${listing.id}/edit`)}
+                className={styles.editButton}
+              >
+                Edit listing
+              </button>
             )}
-            {listing.category && (
-              <p className="text-sm text-gray-300 mb-2">
-                Category: <span>{listing.category}</span>
-              </p>
-            )}
-            {listing.color && (
-              <p className="text-sm text-gray-300 mb-2">
-                Color: <span>{listing.color}</span>
-              </p>
-            )}
-
-            <p className="text-gray-200 mt-4">{listing.description}</p>
           </div>
 
-          <ContactSection
-            sellerName={listing.title || "Unknown Seller"}
-            sellerEmail={listing.title || "example@middlebury.edu"}
-          />
+          {/* Metadata chips */}
+          <div className={styles.metaRow}>
+            {listing.category && (
+              <span className={styles.badge}>{listing.category}</span>
+            )}
+            {listing.condition && (
+              <span className={styles.badge}>{listing.condition}</span>
+            )}
+            {listing.color && (
+              <span className={styles.badge}>{listing.color}</span>
+            )}
+          </div>
+
+          {/* Description section */}
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Description</h2>
+            <p className={styles.description}>
+              {listing.description || "No description provided."}
+            </p>
+          </div>
+
+          {/* Contact card, bottom-right of the big card */}
+          <div className={styles.contactCard}>
+            <ContactSection seller_id={listing.seller_id} />
+          </div>
         </div>
       </div>
     </div>

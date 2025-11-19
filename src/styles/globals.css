@@ -26,6 +26,78 @@ a {
     color-scheme: dark;
   }
 }
+/* Layout for the whole profile page */
+.profile-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  color: #ffffff;
+}
+
+/* Card with name/email/rating */
+.profile-card {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(6px);
+}
+
+/* Top row: text on left, button on right */
+.profile-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.profile-name {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.profile-email {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.profile-rating {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Sign out button */
+.profile-signout {
+  align-self: flex-start;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.profile-signout:hover {
+  background: #ffffff;
+  color: #0b3670; /* your blue background color, or similar */
+}
+
+/* Listings section */
+.profile-listings {
+  margin-top: 1rem;
+}
+
+.profile-listings-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
 
 select {
   width: 100px;

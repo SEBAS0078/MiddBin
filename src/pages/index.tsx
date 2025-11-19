@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import ListingGrid from "@/components/ListingGrid";
 import styles from "@/styles/Home.module.css";
+import type { Listing } from "@/types/Listing";
 import Navbar from "../components/Navbar";
 import { fetchListings } from "../lib/db_functions";
-import type { Listing } from "@/types/Listing";
 // import { supabase } from "../lib/login.supabase";
 
 export default function Home() {
@@ -75,4 +75,3 @@ export default function Home() {
     </>
   );
 }
-
