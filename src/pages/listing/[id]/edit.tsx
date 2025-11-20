@@ -1,27 +1,31 @@
-//biome-ignore-all lint/style/useNamingConvention: uppercase names
 import { useRouter } from "next/router";
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar";
 import { useUserContext } from "@/hooks/useUser";
-import type { NewListing } from "@/types";
-import Navbar from "../components/Navbar";
-import { createListing } from "../lib/db_functions";
-import styles from "../styles/CreateListing.module.css";
+import { fetchListingById, updateListing } from "@/lib/db_functions";
+import styles from "@/styles/CreateListing.module.css";
+import type { Listing } from "@/types";
 
-export default function CreateListing() {
-  const { user } = useUserContext();
+export default function EditListingPage() {
   const router = useRouter();
-  const [title, setTitle] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState<string>("");
-  const [picture, setPicture] = useState<string>("");
-  const [contact, setContact] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [subCategory, setSubCategory] = useState<string>("");
-  const [color, setColor] = useState<string>("");
-  const [size, setSize] = useState<string>("");
-  const [condition, setCondition] = useState<string>("");
-  const [gender, setGender] = useState<string>("");
+  const { id } = router.query;
+  const { user } = useUserContext();
+
+  const [listing, setListing] = useState<Listing | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
+  const [picture, setPicture] = useState("");
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
+  const [condition, setCondition] = useState("");
+  const [gender, setGender] = useState("");
 
   const availableCategories = [
     "Furniture",
@@ -36,7 +40,9 @@ export default function CreateListing() {
   ];
 
   const availableSubcategories: Record<string, string[]> = {
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Furniture: ["Desk", "Chair", "Bed Frame", "Couch", "Dresser", "Other"],
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Electronics: [
       "Laptop",
       "Headphones",
@@ -45,56 +51,115 @@ export default function CreateListing() {
       "Speakers",
       "Other",
     ],
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Clothing: ["Shirt", "Pants", "Jacket", "Shoes", "Accessories", "Other"],
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Books: ["Textbooks", "Novels", "Course Readers", "Comics", "Other"],
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Dorm: ["Mini Fridge", "Lamp", "Storage Bins", "Rug", "Decor", "Other"],
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Tickets: ["Concert", "Sports", "Theater", "Student Events", "Other"],
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Transportation: ["Bike", "Skateboard", "Carpool", "Scooter", "Other"],
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Free: ["Miscellaneous", "Giveaways", "Leftovers", "Other"],
+    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Other: ["Other"],
   };
 
+  useEffect(() => {
+    if (!id || typeof id !== "string") return;
+
+    (async () => {
+      try {
+        setLoading(true);
+        const l = await fetchListingById(id);
+        setListing(l);
+
+        // pre-fill form from listing
+        setTitle(l.title);
+        setPrice(l.price);
+        setDescription(l.description ?? "");
+        setPicture(l.img);
+        setCategory(l.category ?? "");
+        setSubCategory(l.subCategory ?? "");
+        setColor(l.color ?? "");
+        setSize(l.size ?? "");
+        setCondition(l.condition ?? "");
+        setGender(l.gender ?? "");
+      } catch {
+        setError("Could not load listing.");
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [id]);
+
+  // Auth / ownership guards
+  if (!user) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen flex items-center justify-center text-white">
+          <p>You must be signed in to edit a listing.</p>
+        </main>
+      </>
+    );
+  }
+
+  if (!loading && listing && user.id !== listing.seller_id) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen flex items-center justify-center text-white">
+          <p>You can only edit your own listings.</p>
+        </main>
+      </>
+    );
+  }
+
+  if (loading || !listing) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen flex items-center justify-center text-white">
+          <p>{error ?? "Loading listing..."}</p>
+        </main>
+      </>
+    );
+  }
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!user) {
-      alert("You must be signed in to create a listing");
-      return;
-    }
-    if (title === "" || price === 0 || contact === "" || picture === "") {
-      alert("⚠️ Please fill out all the required fields before submitting.");
-      return;
-    }
-
-    const newListing: NewListing = {
-      title: title, // required
-      description: description || "", // default empty
-      price: price, // required
-      img: picture, // required (maps to 'picture' input)
-      seller_id: user.id,
-      category: category || "",
-      subCategory: subCategory || "",
-      color: color || "",
-      condition: condition || "",
-      gender: gender || "",
-    };
-
     try {
-      await createListing(newListing);
-      alert("✅ Listing created successfully!");
-      router.back(); // or router.push("/") etc.
-    } catch {
-      alert('❌ Something went wrong:  $(err?.message ?? ""}');
+      await updateListing(listing.id, {
+        title,
+        description,
+        price,
+        img: picture,
+        category,
+        subCategory,
+        color,
+        size,
+        condition,
+        gender,
+      });
+      alert("✅ Listing updated!");
+      router.push(`/listing/${listing.id}`);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      alert(`❌ Something went wrong: ${message}`);
     }
   };
 
   const handleCancel = () => {
-    router.back(); // Navigates to the home page
+    router.push(`/listing/${listing.id}`);
   };
 
   return (
     <div>
       <Navbar />
-      <h1 className={styles.header}>Create Listing</h1>
+      <h1 className={styles.header}>Edit Listing</h1>
 
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         {/* LEFT COLUMN */}
@@ -132,10 +197,11 @@ export default function CreateListing() {
               Description
             </label>
             <textarea
+              id="description"
               className={styles.textArea}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-            ></textarea>
+            />
           </div>
 
           <div className={styles.inputLabel}>
@@ -149,25 +215,10 @@ export default function CreateListing() {
               min="0"
               step="0.01"
               value={price}
-              placeholder="0"
               onChange={(e) => {
                 const val = Number(e.target.value);
                 setPrice(val < 0 ? 0 : val);
               }}
-            />
-          </div>
-
-          <div className={styles.inputLabel}>
-            <label htmlFor="contact" className={styles.label}>
-              Contact Info *
-            </label>
-            <input
-              id="contact"
-              className={styles.title}
-              type="text"
-              value={contact}
-              placeholder="@middlebury.edu"
-              onChange={(e) => setContact(e.target.value)}
             />
           </div>
         </div>
@@ -185,9 +236,9 @@ export default function CreateListing() {
               onChange={(e) => setCategory(e.target.value)}
             >
               <option value="">Select category</option>
-              {availableCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+              {availableCategories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
                 </option>
               ))}
             </select>
@@ -211,6 +262,7 @@ export default function CreateListing() {
               ))}
             </select>
           </div>
+
           <div className={styles.inputLabel}>
             <label htmlFor="condition" className={styles.label}>
               Condition
@@ -282,36 +334,7 @@ export default function CreateListing() {
                   onChange={(e) => setSize(e.target.value)}
                 >
                   <option value="">Select shoe size</option>
-
-                  <optgroup label="Men's US">
-                    <option value="6">6</option>
-                    <option value="6.5">6.5</option>
-                    <option value="7">7</option>
-                    <option value="7.5">7.5</option>
-                    <option value="8">8</option>
-                    <option value="8.5">8.5</option>
-                    <option value="9">9</option>
-                    <option value="9.5">9.5</option>
-                    <option value="10">10</option>
-                    <option value="10.5">10.5</option>
-                    <option value="11">11</option>
-                    <option value="11.5">11.5</option>
-                    <option value="12">12</option>
-                  </optgroup>
-
-                  <optgroup label="Women's US">
-                    <option value="5">5</option>
-                    <option value="5.5">5.5</option>
-                    <option value="6">6</option>
-                    <option value="6.5">6.5</option>
-                    <option value="7">7</option>
-                    <option value="7.5">7.5</option>
-                    <option value="8">8</option>
-                    <option value="8.5">8.5</option>
-                    <option value="9">9</option>
-                    <option value="9.5">9.5</option>
-                    <option value="10">10</option>
-                  </optgroup>
+                  {/* shoe sizes here if you want */}
                 </select>
               )}
             </div>
@@ -337,7 +360,7 @@ export default function CreateListing() {
 
         <div className={styles.buttonContainer}>
           <button type="submit" className={styles.submitButton}>
-            Submit
+            Save changes
           </button>
           <button
             type="button"

@@ -1,10 +1,6 @@
 // biome-ignore-all lint/performance/noImgElement:temporary fix to allow <img> usage in this file
-
-//import Image from "next/image";
-
 import Link from "next/link";
-import { useRouter } from "next/router";
-import type { Listing } from "@/types/Listing";
+import type { Listing } from "@/types";
 import styles from "../styles/ListingCard.module.css";
 
 type ListingCardProps = {
@@ -12,7 +8,6 @@ type ListingCardProps = {
 };
 
 export default function ListingCard({ item }: ListingCardProps) {
-  const router = useRouter();
   return (
     <Link className={styles.card} href={`/listing/${item.id}`}>
       <img src={item.img} alt={item.title} className={styles.image} />

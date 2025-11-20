@@ -18,6 +18,11 @@ export default function Navbar() {
             </Link>
           </li>
           <li className={styles.navItem}>
+            <Link href="/profile" className={styles.navLink}>
+              Profile
+            </Link>
+          </li>
+          <li className={styles.navItem}>
             <Link href="/contact" className={styles.navLink}>
               Contact
             </Link>

@@ -1,9 +1,8 @@
 import { useRouter } from "next/router";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ListingDetail from "@/components/ListingDetail";
-//import { fetchListingByID } from "@/lib/db_functions";
-import { fetchListingById, fetchListings } from "@/lib/db_functions";
-import type { Listing } from "@/types/Listing";
+import { fetchListingById } from "@/lib/db_functions";
+import type { Listing } from "@/types";
 
 export default function ListingPage() {
   const router = useRouter();
@@ -11,19 +10,11 @@ export default function ListingPage() {
   const [listing, setListing] = useState<Listing | null>(null);
 
   useEffect(() => {
-    async function loadListing() {
-      const { data, error } = await fetchListingById(
-        id as string | string[] | undefined,
-      );
-
-      if (error) {
-        alert("Error fetching listings:");
-      } else {
-        setListing(data);
-      }
-    }
-
-    loadListing();
+    if (!id || typeof id !== "string") return;
+    (async () => {
+      const l = await fetchListingById(id);
+      setListing(l);
+    })();
   }, [id]);
 
   if (!listing) {
