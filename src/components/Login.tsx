@@ -1,23 +1,28 @@
 import { useUserContext } from "@/hooks/useUser";
+import styles from "@/styles/NavBar.module.css";
 
-export default function LoginStatus() {
+export default function Login() {
   const { user, signIn, signOut, error } = useUserContext();
-  let item: React.ReactNode;
+
   if (user) {
-    item = (
-      <div>
-        <p>Hello {user?.user_metadata?.name}</p>
-        <input type="button" value="Sign out" onClick={signOut} />
+    return (
+      <div className={styles.loginStatus}>
+        <span className={styles.userName}>
+          {user.user_metadata?.name?.split(" ")[0] || "User"}
+        </span>
+        <button type="button" className={styles.authButton} onClick={signOut}>
+          Sign out
+        </button>
       </div>
     );
-  } else {
-    item = <input type="button" value="Sign in with Google" onClick={signIn} />;
   }
 
   return (
-    <div>
-      {item}
-      {error && <p>{error}</p>}
+    <div className={styles.loginStatus}>
+      <button type="button" className={styles.authButton} onClick={signIn}>
+        Sign in
+      </button>
+      {error && <span className={styles.error}>{error}</span>}
     </div>
   );
 }

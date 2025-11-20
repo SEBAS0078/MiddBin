@@ -14,6 +14,7 @@ export type UserHookType = {
   signIn: () => void;
   signOut: () => void;
 };
+
 export const UserContext = createContext<UserHookType | undefined>(undefined);
 
 export function useUserContext() {
@@ -32,9 +33,15 @@ export default function useUser() {
 
   const signIn = useCallback(async () => {
     setError(null);
+
+    const redirectUrl =
+      process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || window.location.origin;
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: { redirectTo: redirectUrl },
     });
+
     if (error) setError(error.message);
   }, []);
 
@@ -43,27 +50,28 @@ export default function useUser() {
     const { error } = await supabase.auth.signOut();
     if (error) setError(error.message);
   }, []);
+
   useEffect(() => {
     const getUser = async () => {
       const {
         data: { user: newUser },
         error,
       } = await supabase.auth.getUser();
-      if (error) {
-        setError(error.message);
-      } else {
-        setUser(newUser);
-      }
+
+      if (error) setError(error.message);
+      else setUser(newUser);
     };
 
     getUser();
+
     // Subscribe to auth state changes
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
 
     return () => {
-      sub.subscription.unsubscribe();
+      // newer supabase returns unsubscribe()
+      sub?.subscription?.unsubscribe();
     };
   }, []);
 

@@ -36,3 +36,33 @@
   background: rgba(0, 0, 0, 0.071);
   box-shadow: 0 0 3px black;
 }
+
+/* Login element additions */
+.loginStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.authButton {
+  background-color: #2d72d9;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.authButton:hover {
+  background-color: #1b57b3;
+}
+
+.userName {
+  font-weight: 500;
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+}
