@@ -132,7 +132,7 @@ export default function EditListingPage() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await updateListing(listing.id, {
+      await updateListing(String(listing.id), {
         title,
         description,
         price,

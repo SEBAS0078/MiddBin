@@ -2,14 +2,13 @@
 import { useRouter } from "next/router";
 import type { FormEvent } from "react";
 import { useState } from "react";
-import { useUserContext } from "@/hooks/useUser";
-import type { NewListing } from "@/types";
+import { supabase } from "@/lib/supabase_client";
+import type { Listing } from "@/types";
 import Navbar from "../components/Navbar";
 import { createListing } from "../lib/db_functions";
 import styles from "../styles/CreateListing.module.css";
 
 export default function CreateListing() {
-  const { user } = useUserContext();
   const router = useRouter();
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
@@ -56,34 +55,42 @@ export default function CreateListing() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user) {
-      alert("You must be signed in to create a listing");
-      return;
-    }
-    if (title === "" || price === 0 || contact === "" || picture === "") {
-      alert("⚠️ Please fill out all the required fields before submitting.");
+      alert("You must be logged in to create a listing.");
       return;
     }
 
-    const newListing: NewListing = {
+    const sellerId = user.id;
+
+    const listing: Listing = {
+      id: 0,
       title: title, // required
       description: description || "", // default empty
       price: price, // required
       img: picture, // required (maps to 'picture' input)
-      seller_id: user.id,
+      created: new Date().toISOString(), // timestamp for when created
       category: category || "",
       subCategory: subCategory || "",
       color: color || "",
       condition: condition || "",
       gender: gender || "",
+      seller_id: sellerId,
     };
 
     try {
-      await createListing(newListing);
+      // ✅ Call your imported DB function
+      await createListing(listing);
+
       alert("✅ Listing created successfully!");
-      router.back(); // or router.push("/") etc.
-    } catch {
-      alert('❌ Something went wrong:  $(err?.message ?? ""}');
+      router.back(); // navigate back after success
+    } catch (_err) {
+      //console.error("Unexpected error:", err);
+      alert("❌ Something went wrong.");
     }
   };
 

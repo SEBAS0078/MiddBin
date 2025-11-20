@@ -7,7 +7,6 @@ import styles from "@/styles/Home.module.css";
 import type { Listing } from "@/types";
 import Navbar from "../components/Navbar";
 import { fetchListings } from "../lib/db_functions";
-// import { supabase } from "../lib/login.supabase";
 
 export default function Home() {
   const [collection, setCollection] = useState<Listing[]>([]);
@@ -70,7 +69,7 @@ export default function Home() {
           <ListingGrid collection={collection} />
         </main>
 
-        <footer className={styles.footer}>CS312 Fall 2025 Project</footer>
+        <footer className={styles.footer}>© 2025 MiddBin</footer>
       </div>
     </>
   );

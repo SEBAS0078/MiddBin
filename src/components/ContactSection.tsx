@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useUserContext } from "@/hooks/useUser";
 import { fetchProfile } from "@/lib/db_functions";
+import styles from "@/styles/ContactSection.module.css";
 import type { UserProfile } from "@/types";
 
 type ContactSectionProps = {
-  // biome-ignore lint/style/useNamingConvention: matches Listing type
+  // biome-ignore lint/style/useNamingConvention: DB requires snake_case
   seller_id: string;
 };
 
@@ -14,7 +15,6 @@ export default function ContactSection({ seller_id }: ContactSectionProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Only fetch the seller profile if the viewer is logged in
   useEffect(() => {
     if (!user || !seller_id) return;
 
@@ -32,54 +32,49 @@ export default function ContactSection({ seller_id }: ContactSectionProps) {
     })();
   }, [user, seller_id]);
 
-  // Viewer NOT logged in: show “you must sign in”
+  // Not logged in
   if (!user) {
     return (
-      <div className="mt-6 p-4 bg-indigo-800/60 rounded-xl">
-        <p className="mb-2 text-sm">
+      <div className={styles.wrapper}>
+        <p className={styles.text}>
           You must be signed in to view the seller&apos;s contact information.
         </p>
-        <button
-          type="button"
-          onClick={signIn}
-          className="px-4 py-2 bg-white text-indigo-900 rounded-full text-sm font-semibold"
-        >
+        <button type="button" onClick={signIn} className={styles.button}>
           Sign in with Google
         </button>
       </div>
     );
   }
 
-  // Viewer logged in but still loading seller profile
+  // Loading seller info
   if (loading) {
     return (
-      <div className="mt-6 p-4 bg-indigo-800/60 rounded-xl text-sm">
-        Loading contact info…
+      <div className={styles.wrapper}>
+        <p className={styles.text}>Loading contact info…</p>
       </div>
     );
   }
 
   if (error || !seller) {
     return (
-      <div className="mt-6 p-4 bg-indigo-800/60 rounded-xl text-sm">
-        Contact info unavailable.
+      <div className={styles.wrapper}>
+        <p className={styles.text}>Contact info unavailable.</p>
       </div>
     );
   }
 
-  // Viewer logged in AND seller profile loaded
+  // Logged in, seller loaded
   return (
-    <div className="mt-6 p-4 bg-indigo-800/60 rounded-xl">
-      <h2 className="text-lg font-semibold mb-2">Contact Seller</h2>
-      <p className="text-sm">
-        <span className="font-semibold">Name:</span> {seller.name ?? "Unknown"}
+    <div className={styles.wrapper}>
+      <h2 className={styles.title}>Contact Seller</h2>
+
+      <p className={styles.text}>
+        <span className={styles.title}>Name:</span> {seller.name ?? "Unknown"}
       </p>
-      <p className="text-sm">
-        <span className="font-semibold">Email:</span>{" "}
-        <a
-          href={`mailto:${seller.email}`}
-          className="underline text-indigo-200 break-all"
-        >
+
+      <p className={styles.text}>
+        <span className={styles.title}>Email:</span>{" "}
+        <a href={`mailto:${seller.email}`} className={styles.email}>
           {seller.email}
         </a>
       </p>

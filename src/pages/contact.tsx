@@ -1,31 +1,41 @@
-import Link from "next/link";
-import styles from "@/styles/NavBar.module.css";
+import Navbar from "@/components/Navbar";
 
-export default function contact() {
+export default function Contact() {
   return (
-    <div>
-      <nav>
-        <ul className={styles.navBar}>
-          <li className={styles.navItem}>
-            <Link href="/" className={styles.navLink}>
-              Home
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/about" className={styles.navLink}>
-              About
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/contact" className={styles.navLink}>
-              Contact
-            </Link>
-          </li>
-        </ul>
-      </nav>
+    <div style={{ padding: "2rem" }}>
+      <Navbar />
 
-      <h1>Contact</h1>
-      <p>I will add stuff later just testing for now</p>
+      <h1 style={{ fontSize: "2rem", marginTop: "1.5rem" }}>Contact Us</h1>
+
+      <p style={{ maxWidth: "600px", marginTop: "0.5rem" }}>
+        If you have questions, suggestions, or need support while using the
+        marketplace, feel free to reach out using the information below.
+      </p>
+
+      <div
+        style={{
+          marginTop: "2rem",
+          padding: "1.5rem",
+          borderRadius: "10px",
+          border: "1px solid #ccc",
+          maxWidth: "400px",
+        }}
+      >
+        <h2 style={{ marginBottom: "0.5rem" }}>Contact Info</h2>
+
+        <p style={{ margin: "0.25rem 0" }}>
+          <strong>Email:</strong> middmarketplace@middlebury.com
+        </p>
+
+        <p style={{ margin: "0.25rem 0" }}>
+          <strong>Active Hours:</strong> Mon–Fri, 10am–4pm
+        </p>
+
+        <p style={{ marginTop: "1rem", fontSize: "0.9rem", color: "#666" }}>
+          We're here to help with listing issues, login problems, and general
+          feedback.
+        </p>
+      </div>
     </div>
   );
 }
