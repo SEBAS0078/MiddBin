@@ -1,4 +1,4 @@
-// biome-ignore lint/performance/noImgElement: needed because <img> is required in design
+// biome-ignore-all lint/performance/noImgElement: temporary fixed needed because <img> is required in design
 
 import Link from "next/link";
 import type { Listing } from "@/types";

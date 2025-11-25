@@ -1,10 +1,16 @@
-import Navbar from "@/components/Navbar";
-
 export default function Contact() {
   return (
-    <div style={{ padding: "2rem" }}>
-      <Navbar />
-
+    <div
+      style={{
+        padding: "2rem",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+        textAlign: "center",
+      }}
+    >
       <h1 style={{ fontSize: "2rem", marginTop: "1.5rem" }}>Contact Us</h1>
 
       <p style={{ maxWidth: "600px", marginTop: "0.5rem" }}>

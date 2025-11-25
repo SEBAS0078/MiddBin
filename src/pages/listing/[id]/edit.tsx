@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
-import Navbar from "@/components/Navbar";
 import { useUserContext } from "@/hooks/useUser";
 import { fetchListingById, updateListing } from "@/lib/db_functions";
 import styles from "@/styles/CreateListing.module.css";
@@ -98,34 +97,25 @@ export default function EditListingPage() {
   // Auth / ownership guards
   if (!user) {
     return (
-      <>
-        <Navbar />
-        <main className="min-h-screen flex items-center justify-center text-white">
-          <p>You must be signed in to edit a listing.</p>
-        </main>
-      </>
+      <main className="min-h-screen flex items-center justify-center text-white">
+        <p>You must be signed in to edit a listing.</p>
+      </main>
     );
   }
 
   if (!loading && listing && user.id !== listing.seller_id) {
     return (
-      <>
-        <Navbar />
-        <main className="min-h-screen flex items-center justify-center text-white">
-          <p>You can only edit your own listings.</p>
-        </main>
-      </>
+      <main className="min-h-screen flex items-center justify-center text-white">
+        <p>You can only edit your own listings.</p>
+      </main>
     );
   }
 
   if (loading || !listing) {
     return (
-      <>
-        <Navbar />
-        <main className="min-h-screen flex items-center justify-center text-white">
-          <p>{error ?? "Loading listing..."}</p>
-        </main>
-      </>
+      <main className="min-h-screen flex items-center justify-center text-white">
+        <p>{error ?? "Loading listing..."}</p>
+      </main>
     );
   }
 
@@ -158,7 +148,6 @@ export default function EditListingPage() {
 
   return (
     <div>
-      <Navbar />
       <h1 className={styles.header}>Edit Listing</h1>
 
       <form className={styles.formContainer} onSubmit={handleSubmit}>

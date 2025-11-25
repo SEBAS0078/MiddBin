@@ -1,3 +1,5 @@
+// biome-ignore-all lint/performance/noImgElement: temporary fixed needed because <img> is required in design
+
 import Link from "next/link";
 import type { Listing } from "@/types/Listing";
 import styles from "../styles/ListingCard.module.css";
