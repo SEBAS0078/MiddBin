@@ -61,3 +61,20 @@
   color: #bdbdbd;
   letter-spacing: 0.5px;
 }
+
+.badgeContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.badge {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 30px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.8);
+  color: #e5e7eb;
+}

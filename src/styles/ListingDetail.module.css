@@ -101,24 +101,39 @@
 }
 
 /* edit button */
-.editButton {
+.editButton,
+.deleteButton {
   border: none;
   border-radius: 9999px;
   padding: 0.45rem 1.1rem;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  background: linear-gradient(to right, #22c55e, #14b8a6);
   color: #020617;
-  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35);
   transition:
     transform 0.08s ease,
     box-shadow 0.08s ease;
 }
 
+.editButton {
+  background: linear-gradient(to right, #22c55e, #14b8a6);
+  box-shadow: 0 0px 20px rgba(34, 197, 94, 0.35);
+}
+
+.deleteButton {
+  background: linear-gradient(to right, #c52222, #b86e14);
+  box-shadow: 0 0px 20px rgba(197, 34, 34, 0.35);
+  color: white;
+}
+
 .editButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px rgba(34, 197, 94, 0.45);
+  box-shadow: 0 0px 30px rgba(34, 197, 94, 0.45);
+}
+
+.deleteButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0px 30px rgba(197, 34, 34, 0.45);
 }
 
 .editButton:active {
@@ -239,4 +254,82 @@
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   text-decoration: underline; /* keep underline on hover */
+}
+
+/* Wrapper for single-image gallery */
+.simpleCarousel {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+/* Image styling */
+.simpleImage {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: contain;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* Arrow buttons */
+.prevArrow,
+.nextArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50; /* ABOVE images */
+  background: #f9fafb48;
+  color: black;
+  border: none;
+  padding: 1.25rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+  font-size: 1.25rem;
+}
+
+.prevArrow:hover,
+.nextArrow:hover {
+  background: #f9fafbb9;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prevArrow {
+  left: -2.5rem; /* move outside of image */
+}
+
+.nextArrow {
+  right: -2.5rem;
+}
+
+/* Fix for small screens */
+@media (max-width: 500px) {
+  .prevArrow {
+    left: -1.2rem;
+  }
+  .nextArrow {
+    right: -1.2rem;
+  }
+}
+
+.buttons {
+  grid-column: 1 / -1; /* Make buttons span both columns */
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }

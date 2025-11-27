@@ -2,7 +2,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useUserContext } from "@/hooks/useUser";
-import { fetchListingById, fetchProfile } from "@/lib/db_functions";
+import {
+  deleteListing,
+  fetchListingById,
+  fetchProfile,
+  getListingImgUrls,
+} from "@/lib/db_functions";
 import styles from "@/styles/ListingDetail.module.css";
 import type { Listing, UserProfile } from "@/types";
 
@@ -15,8 +20,25 @@ export default function ListingPage() {
   const [sellerLoading, setSellerLoading] = useState(false);
   const [sellerError, setSellerError] = useState<string | null>(null);
 
+  const [imgUrls, setImgUrls] = useState<string[]>([]);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [loadingImages, setLoadingImages] = useState(true);
+
   const { user, signIn } = useUserContext();
 
+  const handleDelete = async () => {
+    if (!id) return;
+
+    // Ensure id is a string, not an array
+    const listingId = Array.isArray(id) ? id[0] : id;
+
+    try {
+      await deleteListing(listingId);
+      router.push("/");
+    } catch (_error) {
+      alert("❌ Something went wrong.");
+    }
+  };
   // Fetch listing
   useEffect(() => {
     if (!id || typeof id !== "string") return;
@@ -27,16 +49,28 @@ export default function ListingPage() {
     })();
   }, [id]);
 
+  // Fetch images from storage
+  useEffect(() => {
+    if (!listing?.id) return;
+
+    (async () => {
+      setLoadingImages(true);
+      const urls = await getListingImgUrls(listing.id);
+      setImgUrls(urls);
+      setLoadingImages(false);
+    })();
+  }, [listing?.id]);
+
   // Fetch seller info only if logged in
   useEffect(() => {
-    if (!user || !listing?.seller_id) return;
+    if (!user || !listing?.user_id) return;
 
     (async () => {
       setSellerLoading(true);
       setSellerError(null);
 
       try {
-        const profile = await fetchProfile(listing.seller_id);
+        const profile = await fetchProfile(listing.user_id);
         setSeller(profile);
       } catch {
         setSellerError("Unable to load contact info.");
@@ -44,7 +78,7 @@ export default function ListingPage() {
         setSellerLoading(false);
       }
     })();
-  }, [user, listing?.seller_id]);
+  }, [user, listing?.user_id]);
 
   if (!listing) {
     return (
@@ -52,21 +86,57 @@ export default function ListingPage() {
     );
   }
 
-  const isOwner = user?.id === listing.seller_id;
+  const isOwner = user?.id === listing.user_id;
+
+  const handlePrevImage = () => {
+    setCurrentImgIndex((prev) => (prev === 0 ? imgUrls.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    setCurrentImgIndex((prev) => (prev === imgUrls.length - 1 ? 0 : prev + 1));
+  };
 
   return (
     <div className={styles.page}>
       <div className={styles.card}>
         {/* IMAGE COLUMN */}
         <div className={styles.imageCol}>
-          <Image
-            src={listing.img}
-            alt={listing.title}
-            width={800}
-            height={600}
-            className={styles.image}
-            unoptimized
-          />
+          {loadingImages ? (
+            <div className={styles.imagePlaceholder}>Loading images…</div>
+          ) : imgUrls.length > 0 ? (
+            <div className={styles.simpleCarousel}>
+              {imgUrls.length > 1 && (
+                <button
+                  type="button"
+                  className={styles.prevArrow}
+                  onClick={handlePrevImage}
+                >
+                  &#8592;
+                </button>
+              )}
+
+              <Image
+                src={imgUrls[currentImgIndex]}
+                alt={`${listing.title} image`}
+                width={800}
+                height={600}
+                className={styles.simpleImage}
+                unoptimized
+              />
+
+              {imgUrls.length > 1 && (
+                <button
+                  type="button"
+                  className={styles.nextArrow}
+                  onClick={handleNextImage}
+                >
+                  &#8594;
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className={styles.imagePlaceholder}>No images available</div>
+          )}
         </div>
 
         {/* INFO COLUMN */}
@@ -79,13 +149,22 @@ export default function ListingPage() {
             </div>
 
             {isOwner && (
-              <button
-                type="button"
-                onClick={() => router.push(`/listing/${listing.id}/edit`)}
-                className={styles.editButton}
-              >
-                Edit listing
-              </button>
+              <div className={styles.buttons}>
+                <button
+                  type="button"
+                  onClick={() => router.push(`/listing/${listing.id}/edit`)}
+                  className={styles.editButton}
+                >
+                  Edit listing
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className={styles.deleteButton}
+                >
+                  Delete Listing
+                </button>
+              </div>
             )}
           </div>
 
@@ -114,7 +193,6 @@ export default function ListingPage() {
           <div className={styles.contactCard}>
             <h2 className={styles.contactHeader}>Contact</h2>
 
-            {/* Not logged in */}
             {!user && (
               <div className={styles.contactWrapper}>
                 <p className={styles.contactText}>
@@ -131,21 +209,18 @@ export default function ListingPage() {
               </div>
             )}
 
-            {/* Loading seller info */}
             {user && sellerLoading && (
               <div className={styles.contactWrapper}>
                 <p className={styles.contactText}>Loading contact info…</p>
               </div>
             )}
 
-            {/* Error or null seller */}
             {user && !sellerLoading && (sellerError || !seller) && (
               <div className={styles.contactWrapper}>
                 <p className={styles.contactText}>Contact info unavailable.</p>
               </div>
             )}
 
-            {/* Seller info */}
             {user && seller && (
               <div className={styles.contactWrapper}>
                 <p className={styles.contactText}>
@@ -159,9 +234,7 @@ export default function ListingPage() {
                     href={`mailto:${seller.email}?subject=${encodeURIComponent(
                       `Interested in your MiddBin listing: ${listing.title}`,
                     )}&body=${encodeURIComponent(
-                      `Hi ${seller.name ?? "there"},\n\nI saw your listing for "${
-                        listing.title
-                      }" and I'm interested. Could you provide more details?\n\nThanks!`,
+                      `Hi ${seller.name ?? "there"},\n\nI saw your listing for "${listing.title}" and I'm interested. Could you provide more details?\n\nThanks!`,
                     )}`}
                     className={styles.emailLink}
                   >

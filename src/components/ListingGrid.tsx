@@ -23,7 +23,6 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
     minPrice,
     maxPrice,
   ]);
-
   useEffect(() => {
     if (collection.length > 0) {
       const prices = collection.map((i) => Math.floor(i.price));
@@ -70,9 +69,8 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
       item.color?.toLowerCase() === currentColor.toLowerCase();
 
     const priceMatch =
-      priceRange[0] === null ||
-      priceRange[1] === null ||
-      (item.price >= priceRange[0] && item.price <= priceRange[1]);
+      Math.floor(item.price) >= priceRange[0] &&
+      Math.floor(item.price) <= priceRange[1];
 
     return queryMatch && categoryMatch && colorMatch && priceMatch;
   });
