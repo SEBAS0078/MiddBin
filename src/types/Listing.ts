@@ -1,10 +1,10 @@
 export type Listing = {
-  id?: string | number;
+  id: string;
   title: string;
   description?: string;
   img: string;
   // biome-ignore lint/style/useNamingConvention: matches Listing type
-  seller_id: string;
+  user_id: string;
   price: number;
   category?: string;
   subCategory?: string;
@@ -15,7 +15,7 @@ export type Listing = {
   created: string;
 };
 
-export type NewListing = Omit<Listing, "id" | "created">;
+export type NewListing = Omit<Listing, "id" | "created" | "img">;
 
 export type UserProfile = {
   id: string;

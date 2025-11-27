@@ -1,20 +1,20 @@
 //biome-ignore-all lint/style/useNamingConvention: uppercase names
-
+import Image from "next/image";
 import { useRouter } from "next/router";
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "@/hooks/useUser";
 import { supabase } from "@/lib/supabase_client";
-import type { Listing } from "@/types";
-import { createListing } from "../lib/db_functions";
+import type { NewListing } from "@/types";
+import { createListing, uploadImage } from "../lib/db_functions";
 import styles from "../styles/CreateListing.module.css";
 
 export default function CreateListing() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
-  const [picture, setPicture] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [subCategory, setSubCategory] = useState<string>("");
   const [color, setColor] = useState<string>("");
@@ -22,6 +22,8 @@ export default function CreateListing() {
   const [condition, setCondition] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const { user, signIn } = useUserContext();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   const availableCategories = [
     "Furniture",
@@ -54,9 +56,22 @@ export default function CreateListing() {
     Other: ["Other"],
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+
+    const files = Array.from(e.target.files);
+    setSelectedFiles(files);
+
+    const urls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls(urls);
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setIsLoading(true); // show modal
+
+    // Get current logged-in user
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -68,25 +83,31 @@ export default function CreateListing() {
 
     const sellerId = user.id;
 
-    const listing: Listing = {
-      title: title, // required
-      description: description || "", // default empty
-      price: price, // required
-      img: picture, // required (maps to 'picture' input)
-      created: new Date().toISOString(), // timestamp for when created
-      category: category || "",
-      subCategory: subCategory || "",
-      color: color || "",
-      condition: condition || "",
-      gender: gender || "",
-      seller_id: sellerId,
+    // Create listing object (without img)
+    const newListing: NewListing = {
+      title,
+      description: description || "",
+      price,
+      category,
+      subCategory,
+      color,
+      condition,
+      gender,
+      user_id: sellerId,
     };
 
     try {
-      await createListing(listing);
-      router.back(); // navigate back after success
+      // Create the listing and get its ID
+      const listingId = await createListing(newListing);
+
+      // Upload all selected images
+      for (const file of selectedFiles) {
+        await uploadImage(file, listingId);
+      }
+
+      //  Navigate to the newly created listing page
+      router.push(`/listing/${listingId}`);
     } catch (_error) {
-      //console.error("Unexpected error:", error);
       alert("❌ Something went wrong.");
     }
   };
@@ -94,6 +115,14 @@ export default function CreateListing() {
   const handleCancel = () => {
     router.back(); // Navigates to the home page
   };
+
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach((url) => {
+        URL.revokeObjectURL(url); // now this is a statement, not an expression
+      });
+    };
+  }, [previewUrls]);
 
   return (
     <div>
@@ -143,17 +172,30 @@ export default function CreateListing() {
               </div>
 
               <div className={styles.inputLabel}>
-                <label htmlFor="picture" className={styles.label}>
-                  Picture URL *
-                </label>
                 <input
-                  id="picture"
-                  className={styles.title}
-                  type="url"
-                  value={picture}
-                  placeholder="https://example.com/image.jpg"
-                  onChange={(e) => setPicture(e.target.value)}
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFileChange}
+                  className={styles.fileInput} // hidden input
                 />
+                <label htmlFor="image" className={styles.uploadButton}>
+                  Upload Images *
+                </label>
+              </div>
+              <div className={styles.previewContainer}>
+                {previewUrls.map((url, idx) => (
+                  <Image
+                    key={url}
+                    src={url}
+                    alt={`Preview ${idx + 1}`}
+                    width={150}
+                    height={100}
+                    className={styles.previewImage}
+                    unoptimized
+                  />
+                ))}
               </div>
 
               <div className={styles.inputLabel}>
@@ -362,6 +404,14 @@ export default function CreateListing() {
               </button>
             </div>
           </form>
+        </div>
+      )}
+      {isLoading && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <p>Creating your listing…</p>
+            <div className={styles.spinner}></div>
+          </div>
         </div>
       )}
     </div>

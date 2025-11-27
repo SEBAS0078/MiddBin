@@ -1,30 +1,39 @@
+//biome-ignore-all lint/style/useNamingConvention: this is for easy Title case of the categories
+import Image from "next/image";
 import { useRouter } from "next/router";
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 import { useUserContext } from "@/hooks/useUser";
-import { fetchListingById, updateListing } from "@/lib/db_functions";
-import styles from "@/styles/CreateListing.module.css";
+import {
+  fetchListingById,
+  updateListing,
+  uploadImage,
+} from "@/lib/db_functions";
+import styles from "@/styles/CreateListing.module.css"; // reuse create listing CSS
 import type { Listing } from "@/types";
 
 export default function EditListingPage() {
   const router = useRouter();
   const { id } = router.query;
-  const { user } = useUserContext();
+  const { user, signIn } = useUserContext();
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
-  const [picture, setPicture] = useState("");
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const [condition, setCondition] = useState("");
   const [gender, setGender] = useState("");
+
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   const availableCategories = [
     "Furniture",
@@ -39,9 +48,7 @@ export default function EditListingPage() {
   ];
 
   const availableSubcategories: Record<string, string[]> = {
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Furniture: ["Desk", "Chair", "Bed Frame", "Couch", "Dresser", "Other"],
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Electronics: [
       "Laptop",
       "Headphones",
@@ -50,42 +57,33 @@ export default function EditListingPage() {
       "Speakers",
       "Other",
     ],
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Clothing: ["Shirt", "Pants", "Jacket", "Shoes", "Accessories", "Other"],
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Books: ["Textbooks", "Novels", "Course Readers", "Comics", "Other"],
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Dorm: ["Mini Fridge", "Lamp", "Storage Bins", "Rug", "Decor", "Other"],
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Tickets: ["Concert", "Sports", "Theater", "Student Events", "Other"],
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Transportation: ["Bike", "Skateboard", "Carpool", "Scooter", "Other"],
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Free: ["Miscellaneous", "Giveaways", "Leftovers", "Other"],
-    // biome-ignore lint/style/useNamingConvention: category keys are human-readable labels
     Other: ["Other"],
   };
 
+  // --- FETCH LISTING ---
   useEffect(() => {
     if (!id || typeof id !== "string") return;
-
     (async () => {
       try {
         setLoading(true);
         const l = await fetchListingById(id);
         setListing(l);
-
-        // pre-fill form from listing
         setTitle(l.title);
         setPrice(l.price);
         setDescription(l.description ?? "");
-        setPicture(l.img);
         setCategory(l.category ?? "");
         setSubCategory(l.subCategory ?? "");
         setColor(l.color ?? "");
         setSize(l.size ?? "");
         setCondition(l.condition ?? "");
         setGender(l.gender ?? "");
+        if (l.img) setPreviewUrls([l.img]);
       } catch {
         setError("Could not load listing.");
       } finally {
@@ -94,39 +92,35 @@ export default function EditListingPage() {
     })();
   }, [id]);
 
-  // Auth / ownership guards
-  if (!user) {
-    return (
-      <main className="min-h-screen flex items-center justify-center text-white">
-        <p>You must be signed in to edit a listing.</p>
-      </main>
-    );
-  }
+  // --- FILE UPLOAD PREVIEW ---
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const files = Array.from(e.target.files);
+    setSelectedFiles(files);
+    const urls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls(urls);
+  };
 
-  if (!loading && listing && user.id !== listing.seller_id) {
-    return (
-      <main className="min-h-screen flex items-center justify-center text-white">
-        <p>You can only edit your own listings.</p>
-      </main>
-    );
-  }
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach((url) => {
+        URL.revokeObjectURL(url); // now this is a statement, not an expression
+      });
+    };
+  }, [previewUrls]);
 
-  if (loading || !listing) {
-    return (
-      <main className="min-h-screen flex items-center justify-center text-white">
-        <p>{error ?? "Loading listing..."}</p>
-      </main>
-    );
-  }
-
+  // --- FORM SUBMIT ---
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!user || !listing) return;
+
+    setIsSubmitting(true);
+
     try {
-      await updateListing(String(listing.id), {
+      await updateListing(listing.id, {
         title,
         description,
         price,
-        img: picture,
         category,
         subCategory,
         color,
@@ -134,24 +128,67 @@ export default function EditListingPage() {
         condition,
         gender,
       });
-      alert("✅ Listing updated!");
+
+      for (const file of selectedFiles) {
+        await uploadImage(file, listing.id);
+      }
+
       router.push(`/listing/${listing.id}`);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Unknown error";
       alert(`❌ Something went wrong: ${message}`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleCancel = () => {
-    router.push(`/listing/${listing.id}`);
-  };
+  const handleCancel = () => router.back();
+
+  // --- RENDER ---
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-white">
+        <p>{error ?? "Loading listing..."}</p>
+      </main>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main>
+        <p>You must be signed in to edit a listing.</p>
+        <div className={styles.buttonContainer}>
+          <button
+            type="submit"
+            className={styles.submitButton}
+            onClick={signIn}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            className={styles.cancelButton}
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  if (listing && user.id !== listing.user_id) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-white">
+        <p>You can only edit your own listings.</p>
+      </main>
+    );
+  }
 
   return (
     <div>
       <h1 className={styles.header}>Edit Listing</h1>
-
       <form className={styles.formContainer} onSubmit={handleSubmit}>
-        {/* LEFT COLUMN */}
         <div className={styles.inputGroup}>
           <div className={styles.inputLabel}>
             <label htmlFor="title" className={styles.label}>
@@ -159,26 +196,41 @@ export default function EditListingPage() {
             </label>
             <input
               id="title"
-              className={styles.title}
               type="text"
+              className={styles.title}
               value={title}
-              placeholder="Amazing and descriptive title"
               onChange={(e) => setTitle(e.target.value)}
+              placeholder="Amazing and descriptive title"
             />
           </div>
 
           <div className={styles.inputLabel}>
-            <label htmlFor="picture" className={styles.label}>
-              Picture URL *
-            </label>
             <input
-              id="picture"
-              className={styles.title}
-              type="url"
-              value={picture}
-              placeholder="https://example.com/image.jpg"
-              onChange={(e) => setPicture(e.target.value)}
+              id="image"
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileChange}
+              className={styles.fileInput}
             />
+            <label htmlFor="image" className={styles.uploadButton}>
+              Upload Images
+            </label>
+          </div>
+
+          {/* PREVIEW - new class */}
+          <div className={styles.previewContainer}>
+            {previewUrls.map((url, idx) => (
+              <Image
+                key={url}
+                src={url}
+                alt={`Preview ${idx + 1}`}
+                width={150}
+                height={100}
+                className={styles.previewImage}
+                unoptimized
+              />
+            ))}
           </div>
 
           <div className={styles.inputLabel}>
@@ -186,7 +238,6 @@ export default function EditListingPage() {
               Description
             </label>
             <textarea
-              id="description"
               className={styles.textArea}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -199,20 +250,16 @@ export default function EditListingPage() {
             </label>
             <input
               id="price"
-              className={styles.price}
               type="number"
-              min="0"
-              step="0.01"
+              className={styles.price}
               value={price}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                setPrice(val < 0 ? 0 : val);
-              }}
+              min={0}
+              step={0.01}
+              onChange={(e) => setPrice(Math.max(0, Number(e.target.value)))}
             />
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
         <div className={styles.inputGroup}>
           <div className={styles.inputLabel}>
             <label htmlFor="category" className={styles.label}>
@@ -271,6 +318,7 @@ export default function EditListingPage() {
             </select>
           </div>
 
+          {/* Clothing fields */}
           <div
             className={`${styles.clothingWrapper} ${
               category === "Clothing" ? styles.show : ""
@@ -323,7 +371,36 @@ export default function EditListingPage() {
                   onChange={(e) => setSize(e.target.value)}
                 >
                   <option value="">Select shoe size</option>
-                  {/* shoe sizes here if you want */}
+
+                  <optgroup label="Men's US">
+                    <option value="6">6</option>
+                    <option value="6.5">6.5</option>
+                    <option value="7">7</option>
+                    <option value="7.5">7.5</option>
+                    <option value="8">8</option>
+                    <option value="8.5">8.5</option>
+                    <option value="9">9</option>
+                    <option value="9.5">9.5</option>
+                    <option value="10">10</option>
+                    <option value="10.5">10.5</option>
+                    <option value="11">11</option>
+                    <option value="11.5">11.5</option>
+                    <option value="12">12</option>
+                  </optgroup>
+
+                  <optgroup label="Women's US">
+                    <option value="5">5</option>
+                    <option value="5.5">5.5</option>
+                    <option value="6">6</option>
+                    <option value="6.5">6.5</option>
+                    <option value="7">7</option>
+                    <option value="7.5">7.5</option>
+                    <option value="8">8</option>
+                    <option value="8.5">8.5</option>
+                    <option value="9">9</option>
+                    <option value="9.5">9.5</option>
+                    <option value="10">10</option>
+                  </optgroup>
                 </select>
               )}
             </div>
@@ -349,7 +426,7 @@ export default function EditListingPage() {
 
         <div className={styles.buttonContainer}>
           <button type="submit" className={styles.submitButton}>
-            Save changes
+            Save Changes
           </button>
           <button
             type="button"
@@ -360,6 +437,15 @@ export default function EditListingPage() {
           </button>
         </div>
       </form>
+
+      {isSubmitting && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <p>Updating your listing…</p>
+            <div className={styles.spinner}></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
