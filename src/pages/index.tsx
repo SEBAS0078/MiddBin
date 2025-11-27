@@ -5,23 +5,10 @@ import { useEffect, useState } from "react";
 import ListingGrid from "@/components/ListingGrid";
 import styles from "@/styles/Home.module.css";
 import type { Listing } from "@/types";
-import Navbar from "../components/Navbar";
 import { fetchListings } from "../lib/db_functions";
 
 export default function Home() {
   const [collection, setCollection] = useState<Listing[]>([]);
-  // async function signInWithGoogle() {
-  //     const { data, error } = await supabase.auth.signInWithOAuth({
-  //       provider: "google",
-  //       options: {
-  //         redirectTo: "http://localhost:3000/auth/callback",
-  //       },
-  //     });
-
-  //     if (error) {
-  //       console.error("Google login error:", error);
-  //     }
-  //   }
 
   useEffect(() => {
     async function loadListings() {
@@ -44,7 +31,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
       <div className={`${styles.page}`}>
         <main className={styles.main}>
           <div className={styles.logoWrapper}>
@@ -57,7 +43,7 @@ export default function Home() {
           </div>
 
           <h1>MiddBin</h1>
-          <p>A Market place for Middlebury college students</p>
+          <p>A marketplace for Middlebury college students</p>
 
           {/* <button onClick={signInWithGoogle} className={styles.createButton}>
             Login with Google

@@ -75,29 +75,32 @@ select:focus {
 /* ---------- Buttons ---------- */
 .cancelButton,
 .submitButton {
-  font-weight: 600;
   border-radius: 12px;
-  padding: 0.8rem 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
 }
 
 .submitButton {
+  font-weight: 600;
   background: linear-gradient(135deg, #00ff99, #00b4d8);
   color: black;
   box-shadow: 0 0 15px rgba(0, 255, 150, 0.4);
+  padding: 0.8rem 2.2rem; /* vertical | horizontal */
+  font-size: 1.25rem;
 }
 
 .submitButton:hover {
-  transform: translateY(-3px) scale(1.03);
+  transform: translateY(-3px) scale(1.05);
   box-shadow: 0 0 25px rgba(0, 255, 149, 0.6);
 }
 
 .cancelButton {
+  font-weight: 300;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ccc;
+  padding: 0.4rem 1.1rem;
 }
 
 .cancelButton:hover {
@@ -151,4 +154,30 @@ select:focus {
   max-height: 500px; /* big enough to fit all fields */
   opacity: 1;
   transform: translateY(0);
+}
+
+/* From HomeModule: */
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background: #1e3c72;
+  color: white;
+  font-family: "Inter", "SF Pro Display", sans-serif;
+  min-height: 100vh;
+}
+
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+}
+
+.authMessage {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #f0f3f5;
+  font-weight: bold;
 }

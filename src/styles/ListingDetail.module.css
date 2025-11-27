@@ -170,3 +170,73 @@
   display: block;
   margin: 0 auto;
 }
+
+.wrapper {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(30, 30, 80, 0.6);
+  border-radius: 12px;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.text {
+  font-size: 0.875rem;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  background: white;
+  color: #1e1e3f;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.email {
+  color: #c3c8ff;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+/* Sign-in button */
+.signInButton {
+  font-weight: 600;
+  background-color: #cbcccd; /* light shade */
+  color: #000000;
+  border: 1px solid #ddd;
+  padding: 0.8rem 0.8rem; /* vertical | horizontal */
+  font-size: 1rem;
+  border-radius: 10px;
+}
+
+.signInButton:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #00ff99, #00b4d8);
+  box-shadow: 0 0 2px rgba(0, 255, 149, 0.6);
+}
+
+.emailLink {
+  display: inline-block;
+  color: #00aaff;
+  font-weight: 600;
+  text-decoration: underline; /* <- makes the underline */
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.emailLink:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  text-decoration: underline; /* keep underline on hover */
+}

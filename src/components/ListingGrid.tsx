@@ -3,34 +3,11 @@ import { useEffect, useState } from "react";
 import ListingCard from "@/components/ListingCard";
 import SearchBar from "@/components/SearchBar";
 import styles from "@/styles/Home.module.css";
-import type { Listing } from "@/types";
+import type { Listing } from "@/types/Listing";
 
 type ListingGridProps = {
   collection: Listing[];
 };
-function matchesFilters(
-  item: Listing,
-  query: string,
-  currentCat: string,
-  currentColor: string,
-  priceRange: [number, number],
-) {
-  const q = query.toLowerCase();
-
-  const matchesQuery =
-    q === "" ||
-    item.title?.toLowerCase().includes(q) ||
-    item.description?.toLowerCase().includes(q) ||
-    item.category?.toLowerCase().includes(q) ||
-    item.color?.toLowerCase().includes(q);
-
-  const matchesCategory = currentCat === "" || item.category === currentCat;
-  const matchesColor = currentColor === "" || item.color === currentColor;
-  const matchesPrice =
-    item.price >= priceRange[0] && item.price <= priceRange[1];
-
-  return matchesQuery && matchesCategory && matchesColor && matchesPrice;
-}
 
 export default function ListingGrid({ collection = [] }: ListingGridProps) {
   const [currentCat, setCurrentCat] = useState<string>("");
@@ -38,6 +15,7 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
   const [query, setQuery] = useState<string>("");
 
   const prices = collection.map((i: Listing) => Math.floor(i.price));
+
   const minPrice = prices.length > 0 ? Math.floor(Math.min(...prices)) : 0;
   const maxPrice = prices.length > 0 ? Math.ceil(Math.max(...prices)) : 0;
 
@@ -48,43 +26,120 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
 
   useEffect(() => {
     if (collection.length > 0) {
-      const priceVals = collection.map((i) => Math.floor(i.price));
-      const minP = Math.floor(Math.min(...priceVals));
-      const maxP = Math.ceil(Math.max(...priceVals));
-      setPriceRange([minP, maxP]);
+      const prices = collection.map((i) => Math.floor(i.price));
+      const minPrice = Math.floor(Math.min(...prices));
+      const maxPrice = Math.ceil(Math.max(...prices));
+      setPriceRange([minPrice, maxPrice]);
     }
   }, [collection]);
 
-  const catCategory = [...new Set(collection.map((i: Listing) => i.category))];
-  const catColor = [...new Set(collection.map((i: Listing) => i.color))];
+  const catCategory = [
+    "Furniture",
+    "Electronics",
+    "Clothing",
+    "Books",
+    "Dorm",
+    "Tickets",
+    "Transportation",
+    "Free",
+    "Other",
+  ];
 
-  const filteredListings = collection.filter((item) =>
-    matchesFilters(item, query, currentCat, currentColor, priceRange),
-  );
+  const catColor = ["Blue", "Black", "White", "Green", "Red", "Gray", "Yellow"];
+
+  const filteredListings = collection.filter((item) => {
+    const queryLower = query.toLowerCase();
+
+    // Case-insensitive match helper
+    const matchesQuery = (field: string | undefined | null) =>
+      field?.toLowerCase().includes(queryLower) ?? false;
+
+    const queryMatch =
+      query === "" ||
+      matchesQuery(item.title) ||
+      matchesQuery(item.description) ||
+      matchesQuery(item.category) ||
+      matchesQuery(item.color);
+
+    const categoryMatch =
+      currentCat === "" ||
+      item.category?.toLowerCase() === currentCat.toLowerCase();
+
+    const colorMatch =
+      currentColor === "" ||
+      item.color?.toLowerCase() === currentColor.toLowerCase();
+
+    const priceMatch =
+      priceRange[0] === null ||
+      priceRange[1] === null ||
+      (item.price >= priceRange[0] && item.price <= priceRange[1]);
+
+    return queryMatch && categoryMatch && colorMatch && priceMatch;
+  });
 
   return (
     <div className={styles.pageContent}>
       <SearchBar search={setQuery} />
 
       <div className={styles.filters}>
-        <div className={styles.sliderWrapper}>
+        <div style={{ padding: 40 }}>
           <p>
             Price: ${priceRange[0]} - ${priceRange[1]}
           </p>
-
           <Slider.Root
             value={priceRange}
             onValueChange={(val) => setPriceRange(val as [number, number])}
             min={minPrice}
             max={maxPrice}
             step={1}
-            className={styles.sliderRoot}
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              width: 300,
+              height: 30,
+            }}
           >
-            <Slider.Track className={styles.sliderTrack}>
-              <Slider.Range className={styles.sliderRange} />
+            <Slider.Track
+              style={{
+                background: "#ccc",
+                position: "relative",
+                flexGrow: 1,
+                height: 4,
+                borderRadius: 2,
+              }}
+            >
+              <Slider.Range
+                style={{
+                  background: "blue",
+                  position: "absolute",
+                  height: "100%",
+                  borderRadius: 2,
+                }}
+              />
             </Slider.Track>
-            <Slider.Thumb className={styles.sliderThumb} />
-            <Slider.Thumb className={styles.sliderThumb} />
+            <Slider.Thumb
+              style={{
+                display: "block",
+                width: 16,
+                height: 16,
+                background: "white",
+                border: "2px solid black",
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+            />
+            <Slider.Thumb
+              style={{
+                display: "block",
+                width: 16,
+                height: 16,
+                background: "white",
+                border: "2px solid black",
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+            />
           </Slider.Root>
         </div>
 
@@ -103,7 +158,6 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
             ))}
           </select>
         </div>
-
         <div>
           <label htmlFor="color">Color</label>
           <select
@@ -119,7 +173,6 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
             ))}
           </select>
         </div>
-
         <div>
           <button
             className={styles.clearButton}
