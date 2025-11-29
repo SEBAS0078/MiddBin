@@ -98,6 +98,13 @@ export default function ListingPage() {
 
   return (
     <div className={styles.page}>
+      <button
+        type="button"
+        onClick={() => router.push("/")}
+        className={styles.backButton}
+      >
+        ← Back to Listings
+      </button>
       <div className={styles.card}>
         {/* IMAGE COLUMN */}
         <div className={styles.imageCol}>
