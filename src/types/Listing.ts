@@ -22,4 +22,7 @@ export type UserProfile = {
   name: string;
   email: string;
   rating?: number;
+
+  // biome-ignore lint/style/useNamingConvention: Supabase column is snake_case
+  avatar_url?: string;
 };
