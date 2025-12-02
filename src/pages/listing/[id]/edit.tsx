@@ -5,7 +5,9 @@ import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 import { useUserContext } from "@/hooks/useUser";
 import {
+  deleteListingImg,
   fetchListingById,
+  getPublicUrl,
   updateListing,
   uploadImage,
 } from "@/lib/db_functions";
@@ -22,6 +24,7 @@ export default function EditListingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  //Controlled inputs
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
@@ -32,8 +35,11 @@ export default function EditListingPage() {
   const [condition, setCondition] = useState("");
   const [gender, setGender] = useState("");
 
+  //Images
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [existingImgs, setExistingImgs] = useState<string[]>([]);
+  const [deletedImgs, setDeletedImgs] = useState<string[]>([]); // track which existing images the user wants to delete
 
   const availableCategories = [
     "Furniture",
@@ -66,6 +72,11 @@ export default function EditListingPage() {
     Other: ["Other"],
   };
 
+  const removeExistingImg = (imgUrl: string) => {
+    setExistingImgs(existingImgs.filter((url) => url !== imgUrl));
+    setDeletedImgs([...deletedImgs, imgUrl]);
+  };
+
   // --- FETCH LISTING ---
   useEffect(() => {
     if (!id || typeof id !== "string") return;
@@ -73,7 +84,9 @@ export default function EditListingPage() {
       try {
         setLoading(true);
         const l = await fetchListingById(id);
+        setExistingImgs(l.imgs ?? []);
         setListing(l);
+        setExistingImgs(l.imgs ?? []);
         setTitle(l.title);
         setPrice(l.price);
         setDescription(l.description ?? "");
@@ -83,7 +96,6 @@ export default function EditListingPage() {
         setSize(l.size ?? "");
         setCondition(l.condition ?? "");
         setGender(l.gender ?? "");
-        if (l.img) setPreviewUrls([l.img]);
       } catch {
         setError("Could not load listing.");
       } finally {
@@ -109,14 +121,20 @@ export default function EditListingPage() {
     };
   }, [previewUrls]);
 
+  // Remove a newly selected file (not yet uploaded)
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+  };
   // --- FORM SUBMIT ---
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!user || !listing) return;
+    if (!user || !listing || !id || Array.isArray(id)) return;
 
     setIsSubmitting(true);
 
     try {
+      // 1Update all normal listing fields
       await updateListing(listing.id, {
         title,
         description,
@@ -129,17 +147,33 @@ export default function EditListingPage() {
         gender,
       });
 
-      for (const file of selectedFiles) {
-        await uploadImage(file, listing.id);
+      //  Delete any existing images the user removed
+      for (const imgUrl of deletedImgs) {
+        await deleteListingImg(id, imgUrl); // DB function to delete from storage
       }
 
+      // Upload new selected files
+      const newImagePaths: string[] = [];
+      for (const file of selectedFiles) {
+        const path = await uploadImage(file, listing.id);
+        if (path) newImagePaths.push(path);
+      }
+
+      // Convert uploaded paths to public URLs
+      const newUrls = newImagePaths.map((path) => getPublicUrl(path));
+
+      // Merge remaining existing images with newly uploaded ones
+      const updatedImgs = [...existingImgs, ...newUrls];
+
+      // Update listing row with final imgs array
+      await updateListing(listing.id, { imgs: updatedImgs });
+
       router.push(`/listing/${listing.id}`);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Unknown error";
-      alert(`❌ Something went wrong: ${message}`);
-    } finally {
-      setIsSubmitting(false);
+    } catch (_err) {
+      alert("❌ Something went wrong");
     }
+
+    setIsSubmitting(false);
   };
 
   const handleCancel = () => router.back();
@@ -220,16 +254,46 @@ export default function EditListingPage() {
 
           {/* PREVIEW - new class */}
           <div className={styles.previewContainer}>
+            {/* Existing images */}
+            {existingImgs.map((url, idx) => (
+              <div key={url} className={styles.previewWrapper}>
+                <Image
+                  src={url}
+                  alt={`Existing image ${idx + 1}`}
+                  width={150}
+                  height={100}
+                  className={styles.previewImage}
+                  unoptimized
+                />
+                <button
+                  type="button"
+                  className={styles.deleteImageButton}
+                  onClick={() => removeExistingImg(url)}
+                >
+                  X
+                </button>
+              </div>
+            ))}
+
+            {/* New selected files */}
             {previewUrls.map((url, idx) => (
-              <Image
-                key={url}
-                src={url}
-                alt={`Preview ${idx + 1}`}
-                width={150}
-                height={100}
-                className={styles.previewImage}
-                unoptimized
-              />
+              <div key={url} className={styles.previewWrapper}>
+                <Image
+                  src={url}
+                  alt={`Preview ${idx + 1}`}
+                  width={150}
+                  height={100}
+                  className={styles.previewImage}
+                  unoptimized
+                />
+                <button
+                  type="button"
+                  className={styles.deleteImageButton}
+                  onClick={() => removeSelectedFile(idx)}
+                >
+                  ×
+                </button>
+              </div>
             ))}
           </div>
 

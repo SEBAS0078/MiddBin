@@ -1,7 +1,6 @@
 .searchWrapper {
   display: flex;
   flex-direction: column;
-  font-family: sans-serif;
   max-width: 500px;
   margin: 2rem;
   padding: 1rem;

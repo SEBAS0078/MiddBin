@@ -6,7 +6,7 @@ import {
   deleteListing,
   fetchListingById,
   fetchProfile,
-  getListingImgUrls,
+  updateListing,
 } from "@/lib/db_functions";
 import styles from "@/styles/ListingDetail.module.css";
 import type { Listing, UserProfile } from "@/types";
@@ -20,10 +20,7 @@ export default function ListingPage() {
   const [sellerLoading, setSellerLoading] = useState(false);
   const [sellerError, setSellerError] = useState<string | null>(null);
 
-  const [imgUrls, setImgUrls] = useState<string[]>([]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
-  const [loadingImages, setLoadingImages] = useState(true);
-
   const { user, signIn } = useUserContext();
 
   const handleDelete = async () => {
@@ -39,6 +36,20 @@ export default function ListingPage() {
       alert("❌ Something went wrong.");
     }
   };
+
+  const handleSold = async () => {
+    if (!id || !listing) return;
+
+    // Ensure id is a string, not an array
+    const listingId = Array.isArray(id) ? id[0] : id;
+
+    try {
+      await updateListing(listingId, { sold: !listing.sold });
+      router.reload();
+    } catch (_error) {
+      alert("❌ Something went wrong.");
+    }
+  };
   // Fetch listing
   useEffect(() => {
     if (!id || typeof id !== "string") return;
@@ -48,18 +59,6 @@ export default function ListingPage() {
       setListing(l);
     })();
   }, [id]);
-
-  // Fetch images from storage
-  useEffect(() => {
-    if (!listing?.id) return;
-
-    (async () => {
-      setLoadingImages(true);
-      const urls = await getListingImgUrls(listing.id);
-      setImgUrls(urls);
-      setLoadingImages(false);
-    })();
-  }, [listing?.id]);
 
   // Fetch seller info only if logged in
   useEffect(() => {
@@ -89,11 +88,15 @@ export default function ListingPage() {
   const isOwner = user?.id === listing.user_id;
 
   const handlePrevImage = () => {
-    setCurrentImgIndex((prev) => (prev === 0 ? imgUrls.length - 1 : prev - 1));
+    setCurrentImgIndex((prev) =>
+      prev === 0 ? listing.imgs.length - 1 : prev - 1,
+    );
   };
 
   const handleNextImage = () => {
-    setCurrentImgIndex((prev) => (prev === imgUrls.length - 1 ? 0 : prev + 1));
+    setCurrentImgIndex((prev) =>
+      prev === listing.imgs.length - 1 ? 0 : prev + 1,
+    );
   };
 
   return (
@@ -106,13 +109,50 @@ export default function ListingPage() {
         ← Back to Listings
       </button>
       <div className={styles.card}>
+        {isOwner && (
+          <div className={styles.buttons}>
+            {!listing.sold && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => router.push(`/listing/${listing.id}/edit`)}
+                  className={styles.editButton}
+                >
+                  Edit listing ✏️
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSold}
+                  className={styles.soldButton}
+                >
+                  Mark as Sold ✅
+                </button>
+              </>
+            )}
+            {listing.sold && (
+              <button
+                type="button"
+                onClick={handleSold}
+                className={styles.editButton}
+              >
+                Unmark as Sold
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={handleDelete}
+              className={styles.deleteButton}
+            >
+              Delete Listing 🗑️
+            </button>
+          </div>
+        )}
         {/* IMAGE COLUMN */}
         <div className={styles.imageCol}>
-          {loadingImages ? (
-            <div className={styles.imagePlaceholder}>Loading images…</div>
-          ) : imgUrls.length > 0 ? (
+          {listing.imgs.length > 0 ? (
             <div className={styles.simpleCarousel}>
-              {imgUrls.length > 1 && (
+              {listing.imgs.length > 1 && (
                 <button
                   type="button"
                   className={styles.prevArrow}
@@ -123,7 +163,7 @@ export default function ListingPage() {
               )}
 
               <Image
-                src={imgUrls[currentImgIndex]}
+                src={listing.imgs[currentImgIndex]}
                 alt={`${listing.title} image`}
                 width={800}
                 height={600}
@@ -131,7 +171,7 @@ export default function ListingPage() {
                 unoptimized
               />
 
-              {imgUrls.length > 1 && (
+              {listing.imgs.length > 1 && (
                 <button
                   type="button"
                   className={styles.nextArrow}
@@ -149,30 +189,12 @@ export default function ListingPage() {
         {/* INFO COLUMN */}
         <div className={styles.infoCol}>
           {/* Header row */}
+          {listing.sold ? <h2 className={styles.soldBadge}>Sold</h2> : null}
           <div className={styles.headerRow}>
             <div>
               <h1 className={styles.title}>{listing.title}</h1>
               <p className={styles.price}>${listing.price}</p>
             </div>
-
-            {isOwner && (
-              <div className={styles.buttons}>
-                <button
-                  type="button"
-                  onClick={() => router.push(`/listing/${listing.id}/edit`)}
-                  className={styles.editButton}
-                >
-                  Edit listing
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className={styles.deleteButton}
-                >
-                  Delete Listing
-                </button>
-              </div>
-            )}
           </div>
 
           {/* Metadata */}

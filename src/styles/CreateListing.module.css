@@ -157,7 +157,6 @@ body {
   overflow-x: hidden;
   background: #1e3c72;
   color: white;
-  font-family: "Inter", "SF Pro Display", sans-serif;
   min-height: 100vh;
 }
 
@@ -208,8 +207,7 @@ body {
 }
 
 .previewImage:hover {
-  transform: scale(1.05);
-  border-color: #0070f3; /* or your theme color */
+  border-color: #0070f3; /* highlight selected image */
 }
 
 .previewImage.active {
@@ -286,4 +284,29 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+.previewWrapper {
+  position: relative;
+  display: inline-block;
+  margin: 0.5rem;
+}
+
+.deleteImageButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(220, 38, 38, 0.9);
+  color: white;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.deleteImageButton:hover {
+  background: rgba(141, 30, 30, 0.9);
+  transform: scale(1.1);
 }
