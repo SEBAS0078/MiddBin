@@ -71,7 +71,7 @@ export default function ProfilePage() {
         .eq("id", user.id);
 
       setAvatarUrl(`${publicUrl}?t=${Date.now()}`);
-    } catch (err) {
+    } catch (_err) {
       // log removed (biome noConsole)
       alert("Upload failed");
     } finally {

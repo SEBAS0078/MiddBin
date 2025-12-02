@@ -50,14 +50,39 @@ export async function fetchListingsByUser(userId: string): Promise<Listing[]> {
   return (data ?? []) as Listing[];
 }
 
-export async function createListing(newListing: NewListing): Promise<string> {
-  const { data, error } = await supabase
+export async function createListing(
+  newListing: NewListing,
+  imageFiles: File[],
+): Promise<string> {
+  // Step 1: Create listing without images
+  const { data: listing, error } = await supabase
     .from("Listings")
     .insert(newListing)
     .select()
     .single();
+
   if (error) throw error;
-  return data.id as string;
+  const listingId = listing.id as string;
+
+  // Step 2: Upload each image
+  const uploadedPaths: string[] = [];
+  for (const file of imageFiles) {
+    const path = await uploadImage(file, listingId);
+    if (path) uploadedPaths.push(path);
+  }
+
+  // Step 3: Convert paths to public URLs
+  const urls = uploadedPaths.map((path) => getPublicUrl(path));
+
+  // Step 4: Update the listing with imgs array
+  const { error: updateError } = await supabase
+    .from("Listings")
+    .update({ imgs: urls })
+    .eq("id", listingId);
+
+  if (updateError) throw updateError;
+
+  return listingId;
 }
 
 //updates in form {column: "text"} ex: {title: "newTitle"} or {title: "newTitle", contents: "newContents"}
@@ -168,10 +193,9 @@ export async function uploadImage(
     .from("Listing Pictures")
     .upload(filePath, file);
 
-  if (error) {
-    return null;
-  }
+  if (error) return null;
 
+  // return the path, not the URL (best practice)
   return filePath;
 }
 
@@ -200,31 +224,55 @@ export async function getListingImgUrls(listingId?: string): Promise<string[]> {
   return urls;
 }
 
-export async function getOneListingImgUrl(
-  //used for listing cards
-  listingId?: string,
-): Promise<string | null> {
-  if (!listingId) return "";
+export function getPublicUrl(filePath: string): string {
+  return supabase.storage.from("Listing Pictures").getPublicUrl(filePath).data
+    .publicUrl;
+}
 
-  const { data: files, error } = await supabase.storage
-    .from("Listing Pictures")
-    .list(listingId); // no trailing slash
+// Deletes one image from storage AND updates the listing imgs[] field for editing and creating listings
+export async function deleteListingImg(
+  listingId: string,
+  imageUrl: string,
+): Promise<string[]> {
+  // Get current listing to retrieve imgs array
+  const { data: listingData, error: fetchError } = await supabase
+    .from("Listings")
+    .select("imgs")
+    .eq("id", listingId)
+    .single();
 
-  if (error) {
-    return "";
+  if (fetchError || !listingData) {
+    throw new Error("Failed to fetch listing images.");
   }
 
-  if (!files || files.length === 0) {
-    return "";
+  const currentImgs: string[] = listingData.imgs ?? [];
+
+  // Convert public URL to storage path
+  const bucketBase = supabase.storage.from("Listing Pictures").getPublicUrl("")
+    .data.publicUrl;
+
+  const storagePath = imageUrl.replace(bucketBase, "").replace(/^\//, "");
+
+  //Delete from storage
+  const { error: storageError } = await supabase.storage
+    .from("Listing Pictures")
+    .remove([storagePath]);
+
+  if (storageError) {
+    throw new Error("Failed to delete image from storage.");
   }
 
-  // Get the public URL of the first file
-  const firstFile = files[0];
-  const {
-    data: { publicUrl },
-  } = supabase.storage
-    .from("Listing Pictures")
-    .getPublicUrl(`${listingId}/${firstFile.name}`);
+  // Remove it from imgs[] in supabase
+  const updatedImgs = currentImgs.filter((img) => img !== imageUrl);
 
-  return publicUrl || "";
+  const { error: updateError } = await supabase
+    .from("Listings")
+    .update({ imgs: updatedImgs })
+    .eq("id", listingId);
+
+  if (updateError) {
+    throw new Error("Failed to update listing image array.");
+  }
+
+  return updatedImgs;
 }

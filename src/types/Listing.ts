@@ -13,6 +13,7 @@ export type Listing = {
   gender?: string;
   created: string;
   sold: boolean;
+  imgs: string[];
 };
 
 export type NewListing = Omit<Listing, "id" | "created" | "img">;

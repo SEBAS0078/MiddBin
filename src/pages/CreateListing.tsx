@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "@/hooks/useUser";
 import { supabase } from "@/lib/supabase_client";
 import type { NewListing } from "@/types";
-import { createListing, uploadImage } from "../lib/db_functions";
+import { createListing } from "../lib/db_functions";
 import styles from "../styles/CreateListing.module.css";
 
 export default function CreateListing() {
@@ -69,7 +69,7 @@ export default function CreateListing() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setIsLoading(true); // show modal
+    setIsLoading(true);
 
     // Get current logged-in user
     const {
@@ -83,7 +83,7 @@ export default function CreateListing() {
 
     const sellerId = user.id;
 
-    // Create listing object (without img)
+    // Create listing object WITHOUT imgs
     const newListing: NewListing = {
       title,
       description: description || "",
@@ -95,18 +95,11 @@ export default function CreateListing() {
       gender,
       user_id: sellerId,
       sold: false,
+      imgs: [""],
     };
 
     try {
-      // Create the listing and get its ID
-      const listingId = await createListing(newListing);
-
-      // Upload all selected images
-      for (const file of selectedFiles) {
-        await uploadImage(file, listingId);
-      }
-
-      //  Navigate to the newly created listing page
+      const listingId = await createListing(newListing, selectedFiles);
       router.push(`/listing/${listingId}`);
     } catch (_error) {
       alert("❌ Something went wrong.");
@@ -124,6 +117,11 @@ export default function CreateListing() {
       });
     };
   }, [previewUrls]);
+
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+  };
 
   return (
     <div>
@@ -187,15 +185,23 @@ export default function CreateListing() {
               </div>
               <div className={styles.previewContainer}>
                 {previewUrls.map((url, idx) => (
-                  <Image
-                    key={url}
-                    src={url}
-                    alt={`Preview ${idx + 1}`}
-                    width={150}
-                    height={100}
-                    className={styles.previewImage}
-                    unoptimized
-                  />
+                  <div key={url} className={styles.previewWrapper}>
+                    <Image
+                      src={url}
+                      alt={`Preview ${idx + 1}`}
+                      width={150}
+                      height={100}
+                      className={styles.previewImage}
+                      unoptimized
+                    />
+                    <button
+                      type="button"
+                      className={styles.deleteImageButton}
+                      onClick={() => removeSelectedFile(idx)}
+                    >
+                      X
+                    </button>
+                  </div>
                 ))}
               </div>
 

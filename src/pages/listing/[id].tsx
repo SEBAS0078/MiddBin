@@ -6,7 +6,6 @@ import {
   deleteListing,
   fetchListingById,
   fetchProfile,
-  getListingImgUrls,
   updateListing,
 } from "@/lib/db_functions";
 import styles from "@/styles/ListingDetail.module.css";
@@ -21,10 +20,7 @@ export default function ListingPage() {
   const [sellerLoading, setSellerLoading] = useState(false);
   const [sellerError, setSellerError] = useState<string | null>(null);
 
-  const [imgUrls, setImgUrls] = useState<string[]>([]);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
-  const [loadingImages, setLoadingImages] = useState(true);
-
   const { user, signIn } = useUserContext();
 
   const handleDelete = async () => {
@@ -64,18 +60,6 @@ export default function ListingPage() {
     })();
   }, [id]);
 
-  // Fetch images from storage
-  useEffect(() => {
-    if (!listing?.id) return;
-
-    (async () => {
-      setLoadingImages(true);
-      const urls = await getListingImgUrls(listing.id);
-      setImgUrls(urls);
-      setLoadingImages(false);
-    })();
-  }, [listing?.id]);
-
   // Fetch seller info only if logged in
   useEffect(() => {
     if (!user || !listing?.user_id) return;
@@ -104,11 +88,15 @@ export default function ListingPage() {
   const isOwner = user?.id === listing.user_id;
 
   const handlePrevImage = () => {
-    setCurrentImgIndex((prev) => (prev === 0 ? imgUrls.length - 1 : prev - 1));
+    setCurrentImgIndex((prev) =>
+      prev === 0 ? listing.imgs.length - 1 : prev - 1,
+    );
   };
 
   const handleNextImage = () => {
-    setCurrentImgIndex((prev) => (prev === imgUrls.length - 1 ? 0 : prev + 1));
+    setCurrentImgIndex((prev) =>
+      prev === listing.imgs.length - 1 ? 0 : prev + 1,
+    );
   };
 
   return (
@@ -162,11 +150,9 @@ export default function ListingPage() {
         )}
         {/* IMAGE COLUMN */}
         <div className={styles.imageCol}>
-          {loadingImages ? (
-            <div className={styles.imagePlaceholder}>Loading images…</div>
-          ) : imgUrls.length > 0 ? (
+          {listing.imgs.length > 0 ? (
             <div className={styles.simpleCarousel}>
-              {imgUrls.length > 1 && (
+              {listing.imgs.length > 1 && (
                 <button
                   type="button"
                   className={styles.prevArrow}
@@ -177,7 +163,7 @@ export default function ListingPage() {
               )}
 
               <Image
-                src={imgUrls[currentImgIndex]}
+                src={listing.imgs[currentImgIndex]}
                 alt={`${listing.title} image`}
                 width={800}
                 height={600}
@@ -185,7 +171,7 @@ export default function ListingPage() {
                 unoptimized
               />
 
-              {imgUrls.length > 1 && (
+              {listing.imgs.length > 1 && (
                 <button
                   type="button"
                   className={styles.nextArrow}
@@ -203,7 +189,7 @@ export default function ListingPage() {
         {/* INFO COLUMN */}
         <div className={styles.infoCol}>
           {/* Header row */}
-          {listing.sold ? <h2 className={styles.soldBadge}>Sold</h2> : <></>}
+          {listing.sold ? <h2 className={styles.soldBadge}>Sold</h2> : null}
           <div className={styles.headerRow}>
             <div>
               <h1 className={styles.title}>{listing.title}</h1>
