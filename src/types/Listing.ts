@@ -2,7 +2,6 @@ export type Listing = {
   id: string;
   title: string;
   description?: string;
-  img: string;
   // biome-ignore lint/style/useNamingConvention: matches Listing type
   user_id: string;
   price: number;
@@ -13,6 +12,7 @@ export type Listing = {
   condition?: string;
   gender?: string;
   created: string;
+  sold: boolean;
 };
 
 export type NewListing = Omit<Listing, "id" | "created" | "img">;

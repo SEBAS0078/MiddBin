@@ -7,6 +7,7 @@ import {
   fetchListingById,
   fetchProfile,
   getListingImgUrls,
+  updateListing,
 } from "@/lib/db_functions";
 import styles from "@/styles/ListingDetail.module.css";
 import type { Listing, UserProfile } from "@/types";
@@ -35,6 +36,20 @@ export default function ListingPage() {
     try {
       await deleteListing(listingId);
       router.push("/");
+    } catch (_error) {
+      alert("❌ Something went wrong.");
+    }
+  };
+
+  const handleSold = async () => {
+    if (!id || !listing) return;
+
+    // Ensure id is a string, not an array
+    const listingId = Array.isArray(id) ? id[0] : id;
+
+    try {
+      await updateListing(listingId, { sold: !listing.sold });
+      router.reload();
     } catch (_error) {
       alert("❌ Something went wrong.");
     }
@@ -106,6 +121,45 @@ export default function ListingPage() {
         ← Back to Listings
       </button>
       <div className={styles.card}>
+        {isOwner && (
+          <div className={styles.buttons}>
+            {!listing.sold && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => router.push(`/listing/${listing.id}/edit`)}
+                  className={styles.editButton}
+                >
+                  Edit listing ✏️
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSold}
+                  className={styles.soldButton}
+                >
+                  Mark as Sold ✅
+                </button>
+              </>
+            )}
+            {listing.sold && (
+              <button
+                type="button"
+                onClick={handleSold}
+                className={styles.editButton}
+              >
+                Unmark as Sold
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={handleDelete}
+              className={styles.deleteButton}
+            >
+              Delete Listing 🗑️
+            </button>
+          </div>
+        )}
         {/* IMAGE COLUMN */}
         <div className={styles.imageCol}>
           {loadingImages ? (
@@ -149,30 +203,12 @@ export default function ListingPage() {
         {/* INFO COLUMN */}
         <div className={styles.infoCol}>
           {/* Header row */}
+          {listing.sold ? <h2 className={styles.soldBadge}>Sold</h2> : <></>}
           <div className={styles.headerRow}>
             <div>
               <h1 className={styles.title}>{listing.title}</h1>
               <p className={styles.price}>${listing.price}</p>
             </div>
-
-            {isOwner && (
-              <div className={styles.buttons}>
-                <button
-                  type="button"
-                  onClick={() => router.push(`/listing/${listing.id}/edit`)}
-                  className={styles.editButton}
-                >
-                  Edit listing
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className={styles.deleteButton}
-                >
-                  Delete Listing
-                </button>
-              </div>
-            )}
           </div>
 
           {/* Metadata */}

@@ -83,7 +83,6 @@ export default function EditListingPage() {
         setSize(l.size ?? "");
         setCondition(l.condition ?? "");
         setGender(l.gender ?? "");
-        if (l.img) setPreviewUrls([l.img]);
       } catch {
         setError("Could not load listing.");
       } finally {

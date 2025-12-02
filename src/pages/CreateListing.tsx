@@ -94,6 +94,7 @@ export default function CreateListing() {
       condition,
       gender,
       user_id: sellerId,
+      sold: false,
     };
 
     try {
