@@ -3,27 +3,38 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ListingGrid from "@/components/ListingGrid";
+import { useUserContext } from "@/hooks/useUser";
+import { fetchListingsUser } from "@/lib/db_functions";
 import styles from "@/styles/Home.module.css";
 import type { Listing } from "@/types";
 import { fetchListings } from "../lib/db_functions";
 
 export default function Home() {
   const [collection, setCollection] = useState<Listing[]>([]);
-
+  const { user, error, signIn, signOut } = useUserContext();
   useEffect(() => {
     async function loadListings() {
-      const { data, error } = await fetchListings();
+      if (!user) {
+        const { data, error } = await fetchListings();
 
-      if (error) {
-        alert("Error fetching listings:");
+        if (error) {
+          alert("Error fetching listings:");
+        } else {
+          setCollection(data);
+        }
       } else {
-        setCollection(data);
+        const { data, error } = await fetchListingsUser(user.id);
+
+        if (error) {
+          alert("Error fetching listings:");
+        } else {
+          setCollection(data);
+        }
       }
     }
 
     loadListings();
-  }, []);
-
+  }, [user]);
   return (
     <>
       <Head>
