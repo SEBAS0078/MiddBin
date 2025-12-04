@@ -14,6 +14,8 @@ Collaborators:
 - Sebastian Pantzer
 - Ben King
 
+In this app Middlebury college students 
+
 Guide:
 -Dependencies
 To install dependencies you can use npm install and get started on it. 

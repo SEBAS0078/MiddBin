@@ -12,6 +12,19 @@
 html,
 body {
   font-family: "Inter", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none; /* removes the bullet */
+  margin: 0; /* optional: removes default margin */
+  padding: 0; /* optional: removes default padding */
+}
+
+body {
+  background: #1e3c72;
+  color: white;
+  overflow-x: hidden;
 }
 
 * {
@@ -59,6 +72,9 @@ a {
   font-size: 2rem;
   font-weight: 700;
   margin: 0 0 0.25rem;
+}
+body {
+  padding-top: 100px;
 }
 
 .profile-email {

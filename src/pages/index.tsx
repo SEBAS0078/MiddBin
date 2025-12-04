@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ListingGrid from "@/components/ListingGrid";
@@ -44,15 +43,6 @@ export default function Home() {
 
       <div className={`${styles.page}`}>
         <main className={styles.main}>
-          <div className={styles.logoWrapper}>
-            <Image
-              src="/MiddBinLogo.jpeg"
-              alt="MiddBin Logo"
-              width={150}
-              height={150}
-            />
-          </div>
-
           <h1>MiddBin</h1>
           <p>A marketplace for Middlebury college students</p>
 

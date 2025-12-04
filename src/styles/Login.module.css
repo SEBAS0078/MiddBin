@@ -1,12 +1,9 @@
-/* Login.module.css */
-
-/* Outer container for the component */
-
-/* Container for logged-in user */
+/* Container */
 .userContainer {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  height: 100%; /* keeps height consistent */
 }
 
 /* Greeting text */
@@ -14,34 +11,29 @@
   color: black;
   font-weight: 500;
   margin: 0;
-  font-size: 0.875rem; /* slightly smaller to fit navbar */
+  font-size: 0.5rem; /* match navLink */
+  line-height: 1; /* prevents stretching */
 }
 
-/* Sign-out button */
+/* Shared button base */
+.signInButton,
 .signOutButton {
-  background-color: #cbcccd; /* light shade */
+  background-color: #cbcccd;
   color: #000000;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 0.25rem 0.5rem;
+
+  padding: 0.45rem 0.8rem; /* consistent sizing */
+  font-size: 0.85rem; /* match nav font */
+  font-weight: 600;
+
   cursor: pointer;
-  font-size: 0.875rem;
+  line-height: 1; /* prevents vertical stretching */
 }
 
 .signOutButton:hover {
   background-color: #db162f;
-  color: #f0f3f5; /* slightly darker on hover */
-}
-
-/* Sign-in button */
-.signInButton {
-  font-weight: 600;
-  background-color: #cbcccd; /* light shade */
-  color: #000000;
-  border: 1px solid #ddd;
-  padding: 0.8rem 0.8rem; /* vertical | horizontal */
-  font-size: 1rem;
-  border-radius: 10px;
+  color: #f0f3f5;
 }
 
 .signInButton:hover {
@@ -53,6 +45,19 @@
 /* Error message */
 .error {
   color: red;
-  font-size: 0.5rem;
+  font-size: 0.6rem;
   margin-left: 0.5rem;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .userGreeting {
+    font-size: 1rem;
+  }
+
+  .signInButton,
+  .signOutButton {
+    font-size: 1rem;
+    padding: 0.55rem 1rem;
+  }
 }

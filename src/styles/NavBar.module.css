@@ -1,35 +1,80 @@
-/* Navigation Bar stuff */
-.navBar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  background-color: #f0f0f5;
-  padding: 10px 12px; /* slightly larger padding */
-  width: 100%; /* ensures full-width background */
-  box-sizing: border-box; /* prevents any overflow issues */
-  align-items: center;
-  list-style: none;
-  position: sticky;
+/* ---------------------- */
+/* LOGO (responsive)      */
+/* ---------------------- */
+.logoWrapper {
+  position: relative;
+  width: 55px; /* mobile */
+  height: 55px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 0.7rem;
+}
+
+.logoImage {
+  object-fit: cover;
+}
+
+/* ---------------------- */
+/* NAVBAR WRAPPER         */
+/* ---------------------- */
+.navWrapper {
+  position: fixed; /* mobile fixed */
   top: 0;
   left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 64px; /* fixed! */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem; /* consistent horizontal padding */
+  background: white;
   z-index: 999;
 }
 
+/* ---------------------- */
+/* NAV INNER LAYOUT       */
+/* ---------------------- */
+.navInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f0f0f5;
+  padding: 0.5rem 1rem; /* much smaller to avoid huge space */
+}
+
+/* ---------------------- */
+/* LEFT LINKS GROUP       */
+/* ---------------------- */
+.leftGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .navItem {
-  padding: 5px;
+  padding: 4px;
 }
 
 .navLink {
-  font-size: 15px;
+  font-size: 1rem;
   color: #000000;
-  padding: 14px 16px;
+  padding: 0.4rem 0.6rem;
   text-decoration: none;
   text-transform: uppercase;
   font-weight: bold;
-  display: inline-block;
   border-radius: 10px;
-  transition: all 0.1s ease-in-out;
-  border: solid 1px rgba(0, 0, 0, 0);
+  transition: 0.1s ease-in-out;
 }
 
 .navLink:hover {
@@ -37,7 +82,15 @@
   box-shadow: 0 0 3px black;
 }
 
-/* Login element additions */
+/* ---------------------- */
+/* LOGIN GROUP            */
+/* ---------------------- */
+.rightGroup {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
 .loginStatus {
   display: flex;
   align-items: center;
@@ -48,10 +101,10 @@
   background-color: #2d72d9;
   color: white;
   border: none;
-  padding: 4px 10px;
+  padding: 0.35rem 0.7rem;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 .authButton:hover {
@@ -62,7 +115,42 @@
   font-weight: 500;
 }
 
-.error {
-  color: red;
-  font-size: 0.8rem;
+/* ---------------------- */
+/* RESPONSIVE ADJUSTMENTS */
+/* ---------------------- */
+@media (min-width: 768px) {
+  .navInner {
+    padding: 0.2rem 1rem; /* remove big desktop gap */
+  }
+
+  .logoWrapper {
+    width: 90px;
+    height: 90px;
+  }
+
+  .navLink {
+    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .authButton {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logoWrapper {
+    width: 70px;
+    height: 70px;
+  }
+
+  .navLink {
+    font-size: 1.1rem;
+    padding: 0.7rem 1.2rem;
+  }
+
+  .authButton {
+    font-size: 1rem;
+  }
 }

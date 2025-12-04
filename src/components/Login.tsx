@@ -7,10 +7,6 @@ export default function Login() {
   if (user) {
     return (
       <div className={styles.userContainer}>
-        <span className={styles.userGreeting}>
-          {user.user_metadata?.name?.split(" ")[0] || "User"}
-        </span>
-
         <button
           type="button"
           className={styles.signOutButton}
@@ -27,8 +23,6 @@ export default function Login() {
       <button type="button" className={styles.signInButton} onClick={signIn}>
         Sign in
       </button>
-
-      {error && <span className={styles.error}>{error}</span>}
     </div>
   );
 }

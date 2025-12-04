@@ -3,7 +3,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 150px;
+  width: 100%; /* now flexible, controlled by grid */
+  max-width: 180px; /* optional max width for larger screens */
   height: auto;
   padding: 0.6rem;
   border-radius: 1rem;
@@ -77,4 +78,61 @@
   border: 1px solid rgba(148, 163, 184, 0.5);
   background: rgba(15, 23, 42, 0.8);
   color: #e5e7eb;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .card {
+    max-width: 100%; /* cards fill grid column */
+    padding: 0.5rem;
+  }
+
+  .image {
+    height: 150px;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .price {
+    font-size: 1.25rem;
+  }
+
+  .condition {
+    font-size: 0.8rem;
+  }
+
+  .badge {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    max-width: 100%;
+    padding: 0.4rem;
+  }
+
+  .image {
+    height: 120px;
+  }
+
+  .title {
+    font-size: 0.95rem;
+  }
+
+  .price {
+    font-size: 1.1rem;
+  }
+
+  .condition {
+    font-size: 0.75rem;
+  }
+
+  .badge {
+    font-size: 0.55rem;
+    padding: 0.1rem 0.4rem;
+  }
 }

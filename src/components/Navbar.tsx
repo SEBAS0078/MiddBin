@@ -1,36 +1,40 @@
+import Image from "next/image";
 import Link from "next/link";
-import Login from "@/components/Login";
 import styles from "@/styles/NavBar.module.css";
 
 export default function Navbar() {
   return (
-    <div>
-      <nav>
-        <ul className={styles.navBar}>
-          <li className={styles.navItem}>
-            <Link href="/" className={styles.navLink}>
-              Home
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/About" className={styles.navLink}>
-              About
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/profile" className={styles.navLink}>
-              Profile
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/contact" className={styles.navLink}>
-              Contact
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Login />
-          </li>
-        </ul>
+    <div className={styles.navWrapper}>
+      <nav className={styles.navInner}>
+        <div className={styles.logoWrapper}>
+          <Image
+            src="/MiddBinLogo.jpeg"
+            alt="MiddBin Logo"
+            fill
+            className={styles.logoImage}
+          />
+        </div>
+
+        <li className={styles.navItem}>
+          <Link href="/" className={styles.navLink}>
+            Home
+          </Link>
+        </li>
+        <li className={styles.navItem}>
+          <Link href="/about" className={styles.navLink}>
+            About
+          </Link>
+        </li>
+        <li className={styles.navItem}>
+          <Link href="/profile" className={styles.navLink}>
+            Profile
+          </Link>
+        </li>
+        <li className={styles.navItem}>
+          <Link href="/contact" className={styles.navLink}>
+            Contact
+          </Link>
+        </li>
       </nav>
     </div>
   );
