@@ -58,7 +58,8 @@ export default function useUser() {
         error,
       } = await supabase.auth.getUser();
 
-      if (error) setError(error.message);
+      if (error && error.message !== "Auth session missing!")
+        setError(error.message);
       else setUser(newUser);
     };
 
