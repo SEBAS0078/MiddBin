@@ -221,6 +221,6 @@
 @media (max-width: 768px) {
   .listingGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
+    gap: 30px;
   }
 }
