@@ -109,6 +109,24 @@ export default function ListingPage() {
         ← Back to Listings
       </button>
       <div className={styles.card}>
+        {user && seller && (
+          <div className={styles.sellerBadge}>
+            <p className={styles.sellerName}>{seller.name ?? "unknown"}</p>
+            <Image
+              src={seller.avatar_url ?? "/default-avatar.png"}
+              alt={`${seller.name}'s avatar`}
+              width={40}
+              height={40}
+              unoptimized
+              style={{
+                width: "75px",
+                height: "75px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+          </div>
+        )}
         {isOwner && (
           <div className={styles.buttons}>
             {!listing.sold && (
