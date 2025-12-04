@@ -6,13 +6,68 @@ export default function About() {
       <h1 className={styles.header}>About MiddBin</h1>
 
       <section className={styles.section}>
-        <h2 className={styles.subHeader}>Our Mission</h2>
+        <h2 className={styles.subHeader}>Meet the Developers</h2>
+
+        <div className={styles.marqueeContainer}>
+          <div className={styles.marqueeTrack}>
+            <img
+              src="/Developers/1730324663445.jpeg"
+              alt="Sebastian C."
+              className={styles.devImage}
+              width="120"
+              height="120"
+            />
+            <img
+              src="/Developers/1738097311696.jpeg"
+              alt="Arai H."
+              className={styles.devImage}
+              width="120"
+              height="120"
+            />
+            <img
+              src="/Developers/1750198482205.jpeg"
+              alt="Sebastian P."
+              className={styles.devImage}
+              width="120"
+              height="120"
+            />
+            <img
+              src="/Developers/IMG_8508.jpg"
+              alt="Shari B."
+              className={styles.devImage}
+              width="120"
+              height="120"
+            />
+            <img
+              src="/Developers/1689956341226.jpeg"
+              alt="Ben K."
+              className={styles.devImage}
+              width="120"
+              height="120"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.subHeader}>Our Story</h2>
         <p>
-          MiddBin is a student-run marketplace designed to give Middlebury
-          students an easier, faster, and more reliable way to buy, sell, and
-          exchange items around campus. The goal is simple: empower students to
-          find what they need, reduce waste, and build a more connected campus
-          community.
+          Our Story We built this platform to bring true convenience to campus.
+          We all know the struggle—limited recycling center hours (say goodbye
+          to that fridge you thought you could drop off), and the hassle of
+          getting oversized furniture delivered to the mail center. Whether
+          you’re a senior looking to clear out clothes before graduation, a
+          freshman hunting for a mini-fridge, or a student wanting to buy or
+          sell anything in between, you can do it all right here—within the
+          safety and close proximity of your own campus.
+          <br />
+          <br />
+          We’re college students too, so this isn’t meant to be expensive. In
+          fact, it’s the opposite. By eliminating shipping costs and card fees,
+          you can simply meet up, pay in cash, send a quick and secure Venmo, or
+          even give items away for free to de-clutter.
+          <br />
+          <br /> Proximity. Peer-to-peer. Peace-of-mind. That’s the MiddBin way.
         </p>
       </section>
 

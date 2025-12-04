@@ -30,7 +30,7 @@ export default function Contact() {
         <h2 style={{ marginBottom: "0.5rem" }}>Contact Info</h2>
 
         <p style={{ margin: "0.25rem 0" }}>
-          <strong>Email:</strong> middmarketplace@middlebury.com
+          <strong>Email:</strong> MiddBin@gmail.com
         </p>
 
         <p style={{ margin: "0.25rem 0" }}>
