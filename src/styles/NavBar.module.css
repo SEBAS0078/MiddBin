@@ -115,17 +115,32 @@
   font-weight: 500;
 }
 
-/* ---------------------- */
-/* RESPONSIVE ADJUSTMENTS */
-/* ---------------------- */
 @media (min-width: 768px) {
-  .navInner {
-    padding: 0.2rem 1rem; /* remove big desktop gap */
+  .navbar {
+    width: 100%; /* ensure it spans the screen */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0.5rem;
+    background: white;
+    min-height: 56px;
+    box-sizing: border-box; /* important */
+  }
+  .navWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+  }
+  .logoWrapper {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0; /* prevents shrinking due to flex or parent */
   }
 
-  .logoWrapper {
-    width: 90px;
-    height: 90px;
+  .navInner {
+    padding: 0.3rem 1rem;
   }
 
   .navLink {

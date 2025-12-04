@@ -113,7 +113,9 @@ export default function ListingPage() {
           <div className={styles.sellerBadge}>
             <p className={styles.sellerName}>{seller.name ?? "unknown"}</p>
             <Image
-              src={seller.avatar_url ?? "/default-avatar.png"}
+              src={
+                seller.avatar_url ? seller.avatar_url : "/default-avatar.webp"
+              }
               alt={`${seller.name}'s avatar`}
               width={40}
               height={40}
