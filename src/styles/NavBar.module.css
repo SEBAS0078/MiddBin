@@ -45,7 +45,6 @@
 .navInner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background-color: #f0f0f5;
   padding: 0.5rem 1rem; /* much smaller to avoid huge space */
 }
@@ -67,7 +66,7 @@
 }
 
 .navLink {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #000000;
   padding: 0.4rem 0.6rem;
   text-decoration: none;
@@ -129,7 +128,7 @@
   }
 
   .navLink {
-    font-size: 1rem;
+    font-size: 1.5rem;
     padding: 0.5rem 0.8rem;
   }
 
@@ -146,8 +145,8 @@
   }
 
   .navLink {
-    font-size: 1.1rem;
-    padding: 0.7rem 1.2rem;
+    font-size: 1.25rem;
+    padding: 0.9rem 1rem;
   }
 
   .authButton {
