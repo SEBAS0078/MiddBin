@@ -2,12 +2,12 @@ import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ListingGrid from "@/components/ListingGrid";
+import Login from "@/components/Login";
 import { useUserContext } from "@/hooks/useUser";
 import { fetchListingsUser } from "@/lib/db_functions";
 import styles from "@/styles/Home.module.css";
 import type { Listing } from "@/types";
 import { fetchListings } from "../lib/db_functions";
-
 export default function Home() {
   const [collection, setCollection] = useState<Listing[]>([]);
   const { user, error, signIn, signOut } = useUserContext();
@@ -54,6 +54,8 @@ export default function Home() {
             Create Listing!
           </Link>
           <ListingGrid collection={collection} />
+
+          <Login />
         </main>
 
         <footer className={styles.footer}>© 2025 MiddBin</footer>
