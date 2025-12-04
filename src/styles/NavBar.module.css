@@ -85,9 +85,10 @@
 /* LOGIN GROUP            */
 /* ---------------------- */
 .rightGroup {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
+  display: flex; /* make this a flex container */
+  align-items: center; /* vertically center items */
+  margin-left: auto; /* pushes the group to the right */
+  gap: 12px; /* optional spacing between items */
 }
 
 .loginStatus {
@@ -128,7 +129,7 @@
   }
 
   .navLink {
-    font-size: 1.5rem;
+    font-size: 1rem;
     padding: 0.5rem 0.8rem;
   }
 
@@ -145,7 +146,7 @@
   }
 
   .navLink {
-    font-size: 1.25rem;
+    font-size: 1rem;
     padding: 0.9rem 1rem;
   }
 

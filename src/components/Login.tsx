@@ -7,13 +7,13 @@ export default function Login() {
   if (user) {
     return (
       <div className={styles.userContainer}>
-        <button
+        {/* <button
           type="button"
           className={styles.signOutButton}
           onClick={signOut}
         >
           Sign out
-        </button>
+        </button> */}
       </div>
     );
   }

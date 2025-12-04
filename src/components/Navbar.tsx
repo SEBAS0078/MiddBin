@@ -14,27 +14,28 @@ export default function Navbar() {
             className={styles.logoImage}
           />
         </div>
-
-        <li className={styles.navItem}>
-          <Link href="/" className={styles.navLink}>
-            Home
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link href="/about" className={styles.navLink}>
-            About
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link href="/profile" className={styles.navLink}>
-            Profile
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link href="/contact" className={styles.navLink}>
-            Contact
-          </Link>
-        </li>
+        <div className={styles.rightGroup}>
+          <li className={styles.navItem}>
+            <Link href="/" className={styles.navLink}>
+              Home
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href="/about" className={styles.navLink}>
+              About
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href="/profile" className={styles.navLink}>
+              Profile
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href="/contact" className={styles.navLink}>
+              Contact
+            </Link>
+          </li>
+        </div>
       </nav>
     </div>
   );

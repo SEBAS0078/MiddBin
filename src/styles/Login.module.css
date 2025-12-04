@@ -21,14 +21,17 @@
   background-color: #cbcccd;
   color: #000000;
   border: 1px solid #ddd;
-  border-radius: 8px;
-
-  padding: 0.45rem 0.8rem; /* consistent sizing */
-  font-size: 0.85rem; /* match nav font */
+  border-radius: 20px;
+  padding: 1rem 1rem; /* consistent sizing */
+  font-size: 2rem; /* match nav font */
   font-weight: 600;
 
   cursor: pointer;
   line-height: 1; /* prevents vertical stretching */
+}
+
+.signInButton {
+  background: linear-gradient(135deg, #00ff99, #00b4d8);
 }
 
 .signOutButton:hover {
@@ -38,7 +41,6 @@
 
 .signInButton:hover {
   transform: scale(1.05);
-  background: linear-gradient(135deg, #00ff99, #00b4d8);
   box-shadow: 0 0 2px rgba(0, 255, 149, 0.6);
 }
 
