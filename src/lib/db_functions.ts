@@ -31,6 +31,21 @@ export async function fetchListings() {
   return { error: null, data: data ?? [] };
 }
 
+export async function fetchListingsUser(userId: string) {
+  const { error, data } = await supabase
+    .from("Listings")
+    .select("*")
+    .eq("sold", false)
+    .neq("user_id", userId);
+
+  if (error) {
+    alert("Error fetching listings:");
+    return { error, data: [] };
+  }
+
+  return { error: null, data: data ?? [] };
+}
+
 export async function fetchListingById(listingId: string): Promise<Listing> {
   const { data, error } = await supabase
     .from("Listings")
