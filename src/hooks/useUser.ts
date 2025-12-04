@@ -34,8 +34,7 @@ export default function useUser() {
   const signIn = useCallback(async () => {
     setError(null);
 
-    const redirectUrl =
-      process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || window.location.origin;
+    const redirectUrl = window.location.origin;
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
