@@ -5,6 +5,7 @@ import ProfileHeader from "@/components/ProfileHeader";
 import { useUserContext } from "@/hooks/useUser";
 import { fetchListingsByUser, fetchProfile } from "@/lib/db_functions";
 import { supabase } from "@/lib/supabase_client";
+import styles from "@/styles/Login.module.css";
 import type { Listing, UserProfile } from "@/types";
 
 export default function ProfilePage() {
@@ -82,11 +83,11 @@ export default function ProfilePage() {
   // Not signed in
   if (!user) {
     return (
-      <main className="profile-page">
+      <main className="profile-page" style={{ textAlign: "center" }}>
         <h1>Please Sign In</h1>
         {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="button" onClick={signIn}>
-          Sign In with Google
+        <button type="button" className={styles.signInButton} onClick={signIn}>
+          Sign In
         </button>
       </main>
     );
@@ -115,11 +116,21 @@ export default function ProfilePage() {
 
   return (
     <main className="profile-page">
-      <div className="profile-header-row">
-        {/* Avatar section */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "flex-start",
+        }}
+      >
         <div
           className="profile-avatar"
-          style={{ marginRight: "20px", textAlign: "center" }}
+          style={{
+            width: "150px",
+            marginRight: "20px",
+            textAlign: "center",
+            flexShrink: 0,
+          }}
         >
           <Image
             src={avatarUrl || "/default-avatar.png"}
@@ -156,17 +167,26 @@ export default function ProfilePage() {
           </label>
         </div>
 
-        <ProfileHeader
-          user={{
-            username: displayName,
-            email: displayEmail,
-            rating: displayRating ?? undefined,
-          }}
-        />
-
-        <button type="button" onClick={signOut} className="profile-signout">
-          Sign Out
-        </button>
+        <div style={{ flex: 1 }}>
+          <ProfileHeader
+            user={{
+              username: displayName,
+              email: displayEmail,
+              rating: displayRating ?? undefined,
+            }}
+          />
+          <button
+            type="button"
+            onClick={signOut}
+            className="profile-signout"
+            style={{
+              marginTop: "20px",
+              alignSelf: "flex-start",
+            }}
+          >
+            Sign Out
+          </button>
+        </div>
       </div>
 
       <section className="profile-listings">

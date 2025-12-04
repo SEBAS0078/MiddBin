@@ -13,7 +13,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li className={styles.navItem}>
-            <Link href="/about" className={styles.navLink}>
+            <Link href="/About" className={styles.navLink}>
               About
             </Link>
           </li>

@@ -80,66 +80,68 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
       <SearchBar search={setQuery} />
 
       <div className={styles.filters}>
-        <div style={{ padding: 40 }}>
-          <p>
-            Price: ${priceRange[0]} - ${priceRange[1]}
-          </p>
-          <Slider.Root
-            value={priceRange}
-            onValueChange={(val) => setPriceRange(val as [number, number])}
-            min={minPrice}
-            max={maxPrice}
-            step={1}
-            style={{
-              position: "relative",
-              display: "flex",
-              alignItems: "center",
-              width: 300,
-              height: 30,
-            }}
-          >
-            <Slider.Track
+        {collection.length > 1 && (
+          <div style={{ padding: 40 }}>
+            <p>
+              ${priceRange[0]} - ${priceRange[1]}
+            </p>
+            <Slider.Root
+              value={priceRange}
+              onValueChange={(val) => setPriceRange(val as [number, number])}
+              min={minPrice}
+              max={maxPrice}
+              step={1}
               style={{
-                background: "#ccc",
                 position: "relative",
-                flexGrow: 1,
-                height: 4,
-                borderRadius: 2,
+                display: "flex",
+                alignItems: "center",
+                width: 300,
+                height: 30,
               }}
             >
-              <Slider.Range
+              <Slider.Track
                 style={{
-                  background: "blue",
-                  position: "absolute",
-                  height: "100%",
+                  background: "#ccc",
+                  position: "relative",
+                  flexGrow: 1,
+                  height: 4,
                   borderRadius: 2,
                 }}
+              >
+                <Slider.Range
+                  style={{
+                    background: "blue",
+                    position: "absolute",
+                    height: "100%",
+                    borderRadius: 2,
+                  }}
+                />
+              </Slider.Track>
+              <Slider.Thumb
+                style={{
+                  display: "block",
+                  width: 16,
+                  height: 16,
+                  background: "white",
+                  border: "2px solid black",
+                  borderRadius: "50%",
+                  cursor: "pointer",
+                }}
               />
-            </Slider.Track>
-            <Slider.Thumb
-              style={{
-                display: "block",
-                width: 16,
-                height: 16,
-                background: "white",
-                border: "2px solid black",
-                borderRadius: "50%",
-                cursor: "pointer",
-              }}
-            />
-            <Slider.Thumb
-              style={{
-                display: "block",
-                width: 16,
-                height: 16,
-                background: "white",
-                border: "2px solid black",
-                borderRadius: "50%",
-                cursor: "pointer",
-              }}
-            />
-          </Slider.Root>
-        </div>
+              <Slider.Thumb
+                style={{
+                  display: "block",
+                  width: 16,
+                  height: 16,
+                  background: "white",
+                  border: "2px solid black",
+                  borderRadius: "50%",
+                  cursor: "pointer",
+                }}
+              />
+            </Slider.Root>
+          </div>
+        )}
 
         <div>
           <label htmlFor="category">Category</label>

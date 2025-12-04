@@ -20,7 +20,6 @@ export default function SearchBar({ search }: SearchBarProps) {
   };
   return (
     <div className={styles.searchWrapper}>
-      <label htmlFor="search">Search:</label>
       <input
         type="text"
         id="search"

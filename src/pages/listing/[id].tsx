@@ -260,11 +260,15 @@ export default function ListingPage() {
                 <p className={styles.contactText}>
                   <span className={styles.contactTitle}>Email:</span>{" "}
                   <a
-                    href={`mailto:${seller.email}?subject=${encodeURIComponent(
+                    href={`https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(
+                      seller.email,
+                    )}&subject=${encodeURIComponent(
                       `Interested in your MiddBin listing: ${listing.title}`,
                     )}&body=${encodeURIComponent(
                       `Hi ${seller.name ?? "there"},\n\nI saw your listing for "${listing.title}" and I'm interested. Could you provide more details?\n\nThanks!`,
                     )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={styles.emailLink}
                   >
                     Email Seller
