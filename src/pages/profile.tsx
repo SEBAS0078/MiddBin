@@ -104,15 +104,9 @@ export default function ProfilePage() {
 
   // Build display values:
   // name/email primarily from auth, but fall back to profiles if needed
-  const displayName =
-    (profile?.name as string | undefined) ??
-    (user.user_metadata?.full_name as string | undefined) ??
-    (user.email ? user.email.split("@")[0] : "") ??
-    "";
+  const displayName = (profile?.name as string | undefined) ?? "";
 
-  const displayEmail = profile?.email ?? user.email ?? "";
-
-  const displayRating = profile?.rating ?? null;
+  const displayEmail = profile?.email ?? "";
 
   return (
     <main className="profile-page">
@@ -172,7 +166,6 @@ export default function ProfilePage() {
             user={{
               username: displayName,
               email: displayEmail,
-              rating: displayRating ?? undefined,
             }}
           />
           <button
