@@ -13,7 +13,7 @@ export default function CreateListing() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<number>(-1);
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [subCategory, setSubCategory] = useState<string>("");
@@ -78,6 +78,13 @@ export default function CreateListing() {
 
     if (!user) {
       alert("You must be logged in to create a listing.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (price < 0) {
+      alert("Please enter a valid price.");
+      setIsLoading(false);
       return;
     }
 
@@ -224,13 +231,12 @@ export default function CreateListing() {
                   id="price"
                   className={styles.price}
                   type="number"
-                  min="0"
                   step="0.01"
-                  value={price}
-                  placeholder="0"
+                  value={price === -1 ? "" : price} // display empty if price is 0
+                  placeholder=""
                   onChange={(e) => {
-                    const val = Number(e.target.value);
-                    setPrice(val < 0 ? 0 : val);
+                    const val = e.target.value;
+                    setPrice(val === "" ? -1 : Number(val));
                   }}
                 />
               </div>

@@ -127,7 +127,7 @@ export default function ProfilePage() {
           }}
         >
           <Image
-            src={avatarUrl || "/default-avatar.png"}
+            src={avatarUrl ? avatarUrl : "/default-avatar.webp"}
             alt="Profile avatar"
             width={120}
             height={120}

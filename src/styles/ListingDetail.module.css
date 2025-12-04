@@ -42,6 +42,14 @@
   color: rgb;
 }
 
+@media (max-width: 600px) {
+  .sellerBadge {
+    position: static; /* no absolute positioning */
+    margin-bottom: 1rem;
+    align-self: flex-end; /* optional: push to the right */
+  }
+}
+
 @media (min-width: 768px) {
   .card {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);

@@ -21,7 +21,10 @@ export async function checkUserExists(partial: Partial<UserProfile> = {}) {
 }
 
 export async function fetchListings() {
-  const { error, data } = await supabase.from("Listings").select("*");
+  const { error, data } = await supabase
+    .from("Listings")
+    .select("*")
+    .eq("sold", false);
 
   if (error) {
     alert("Error fetching listings:");
