@@ -297,6 +297,23 @@ export default function ListingPage() {
               </div>
             )}
           </div>
+          <p className={styles.reportText}>
+            <span className={styles.reportTitle}></span>{" "}
+            <a
+              href={`https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(
+                "MiddBin@gmail.com",
+              )}&subject=${encodeURIComponent(
+                `Report MiddBin Listing: ${listing.title}`,
+              )}&body=${encodeURIComponent(
+                `Hello,\n\nI would like to report the following listing on MiddBin:\n\nTitle: "${listing.title}"\nListing ID: ${listing.id}\n\nReason for report:\n(Please describe why you believe this listing violates community guidelines or should be reviewed.)\n\nThank you. \n -The MiddBin Team`,
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.reportLink}
+            >
+              Report this listing
+            </a>
+          </p>
         </div>
       </div>
     </div>

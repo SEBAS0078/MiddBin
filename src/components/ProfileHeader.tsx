@@ -4,7 +4,6 @@ type ProfileHeaderProps = {
   user: {
     username?: string;
     email?: string;
-    rating?: number | null;
   };
 };
 
