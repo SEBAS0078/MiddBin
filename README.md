@@ -1,6 +1,6 @@
-![workflow status](https://github.com/csci0312-f25/project-amber-aardvark/actions/workflows/node.js.yml/badge.svg)
+![workflow status](https://SEBAS0078/MiddBin/actions/workflows/node.js.yml/badge.svg)
 
-Deployed Link: https://project-amber-aardvark.csci312.dev
+[Deployed Website](https://middbin.netlify.app)
 
 
 MidBin
