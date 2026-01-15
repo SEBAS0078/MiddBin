@@ -42,3 +42,4 @@ next-env.d.ts
 .netlify/.next
 .next
 .netlify/.next
+.env.local
