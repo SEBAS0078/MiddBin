@@ -31,9 +31,6 @@ export default function CreateListing() {
     "Clothing",
     "Books",
     "Dorm",
-    "Tickets",
-    "Transportation",
-    "Free",
     "Other",
   ];
 
@@ -50,9 +47,6 @@ export default function CreateListing() {
     Clothing: ["Shirt", "Pants", "Jacket", "Shoes", "Accessories", "Other"],
     Books: ["Textbooks", "Novels", "Course Readers", "Comics", "Other"],
     Dorm: ["Mini Fridge", "Lamp", "Storage Bins", "Rug", "Decor", "Other"],
-    Tickets: ["Concert", "Sports", "Theater", "Student Events", "Other"],
-    Transportation: ["Bike", "Skateboard", "Carpool", "Scooter", "Other"],
-    Free: ["Miscellaneous", "Giveaways", "Leftovers", "Other"],
     Other: ["Other"],
   };
 
@@ -322,6 +316,9 @@ export default function CreateListing() {
                     <option value="red">Red</option>
                     <option value="gray">Gray</option>
                     <option value="yellow">Yellow</option>
+                    <option value="brown">Brown</option>
+                    <option value="purple">Purple</option>
+                    <option value="orange">Orange</option>
                   </select>
                 </div>
 

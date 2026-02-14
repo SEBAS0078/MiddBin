@@ -24,10 +24,8 @@
   gap: 2rem;
 }
 .sellerBadge {
-  position: absolute;
-  top: 16px;
-  right: 8px;
   display: flex;
+  width: 40%;
   align-items: center;
   outline: 2px solid #ffffff;
   border-radius: 1.5rem;

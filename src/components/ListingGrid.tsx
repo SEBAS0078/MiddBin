@@ -10,7 +10,7 @@ type ListingGridProps = {
 };
 
 export default function ListingGrid({ collection = [] }: ListingGridProps) {
-  const [currentCat, setCurrentCat] = useState<string>("");
+  const [currentCat, setCurrentCat] = useState<string>("Clothing");
   const [currentColor, setCurrentColor] = useState<string>("");
   const [query, setQuery] = useState<string>("");
 
@@ -38,13 +38,21 @@ export default function ListingGrid({ collection = [] }: ListingGridProps) {
     "Clothing",
     "Books",
     "Dorm",
-    "Tickets",
-    "Transportation",
-    "Free",
     "Other",
   ];
 
-  const catColor = ["Blue", "Black", "White", "Green", "Red", "Gray", "Yellow"];
+  const catColor = [
+    "Blue",
+    "Black",
+    "White",
+    "Green",
+    "Red",
+    "Gray",
+    "Yellow",
+    "Brown",
+    "Purple",
+    "Orange",
+  ];
 
   const filteredListings = collection.filter((item) => {
     const queryLower = query.toLowerCase();

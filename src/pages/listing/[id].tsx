@@ -109,26 +109,6 @@ export default function ListingPage() {
         ← Back to Listings
       </button>
       <div className={styles.card}>
-        {user && seller && (
-          <div className={styles.sellerBadge}>
-            <p className={styles.sellerName}>{seller.name ?? "unknown"}</p>
-            <Image
-              src={
-                seller.avatar_url ? seller.avatar_url : "/default-avatar.webp"
-              }
-              alt={`${seller.name}'s avatar`}
-              width={40}
-              height={40}
-              unoptimized
-              style={{
-                width: "75px",
-                height: "75px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
-          </div>
-        )}
         {isOwner && (
           <div className={styles.buttons}>
             {!listing.sold && (
@@ -208,6 +188,26 @@ export default function ListingPage() {
 
         {/* INFO COLUMN */}
         <div className={styles.infoCol}>
+          {user && seller && (
+            <div className={styles.sellerBadge}>
+              <p className={styles.sellerName}>{seller.name ?? "unknown"}</p>
+              <Image
+                src={
+                  seller.avatar_url ? seller.avatar_url : "/default-avatar.webp"
+                }
+                alt={`${seller.name}'s avatar`}
+                width={40}
+                height={40}
+                unoptimized
+                style={{
+                  width: "75px",
+                  height: "75px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+            </div>
+          )}
           {/* Header row */}
           {listing.sold ? <h2 className={styles.soldBadge}>Sold</h2> : null}
           <div className={styles.headerRow}>
