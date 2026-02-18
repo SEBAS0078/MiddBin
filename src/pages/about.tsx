@@ -52,14 +52,14 @@ export default function About() {
       <section className={styles.section}>
         <h2 className={styles.subHeader}>Our Story</h2>
         <p>
-          Our Story We built this platform to bring true convenience to campus.
-          We all know the struggle—limited recycling center hours (say goodbye
-          to that fridge you thought you could drop off), and the hassle of
-          getting oversized furniture delivered to the mail center. Whether
-          you’re a senior looking to clear out clothes before graduation, a
-          freshman hunting for a mini-fridge, or a student wanting to buy or
-          sell anything in between, you can do it all right here—within the
-          safety and close proximity of your own campus.
+          We built this platform to bring true convenience to campus. We all
+          know the struggle—limited recycling center hours (say goodbye to that
+          fridge you thought you could drop off), and the hassle of getting
+          oversized furniture delivered to the mail center. Whether you’re a
+          senior looking to clear out clothes before graduation, a freshman
+          hunting for a mini-fridge, or a student wanting to buy or sell
+          anything in between, you can do it all right here—within the safety
+          and close proximity of your own campus.
           <br />
           <br />
           We’re college students too, so this isn’t meant to be expensive. In
