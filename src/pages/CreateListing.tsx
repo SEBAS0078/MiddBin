@@ -81,6 +81,11 @@ export default function CreateListing() {
       setIsLoading(false);
       return;
     }
+    if (title === "") {
+      alert("Please enter a title.");
+      setIsLoading(false);
+      return;
+    }
 
     const sellerId = user.id;
 
@@ -326,21 +331,7 @@ export default function CreateListing() {
                   <label htmlFor="size" className={styles.label}>
                     Size
                   </label>
-                  {subCategory !== "Shoes" ? (
-                    <select
-                      id="size"
-                      className={styles.title}
-                      value={size}
-                      onChange={(e) => setSize(e.target.value)}
-                    >
-                      <option value="">Select size</option>
-                      <option value="XS">XS</option>
-                      <option value="S">S</option>
-                      <option value="M">M</option>
-                      <option value="L">L</option>
-                      <option value="XL">XL</option>
-                    </select>
-                  ) : (
+                  {subCategory === "Shoes" ? (
                     <select
                       id="size"
                       className={styles.title}
@@ -378,6 +369,34 @@ export default function CreateListing() {
                         <option value="9.5">9.5</option>
                         <option value="10">10</option>
                       </optgroup>
+                    </select>
+                  ) : subCategory === "Pants" ? (
+                    <select
+                      id="size"
+                      className={styles.title}
+                      value={size}
+                      onChange={(e) => setSize(e.target.value)}
+                    >
+                      <option value="">Select waist size</option>
+                      {[26, 28, 30, 32, 34, 36, 38, 40].map((num) => (
+                        <option key={num} value={num}>
+                          {num}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <select
+                      id="size"
+                      className={styles.title}
+                      value={size}
+                      onChange={(e) => setSize(e.target.value)}
+                    >
+                      <option value="">Select size</option>
+                      <option value="XS">XS</option>
+                      <option value="S">S</option>
+                      <option value="M">M</option>
+                      <option value="L">L</option>
+                      <option value="XL">XL</option>
                     </select>
                   )}
                 </div>
