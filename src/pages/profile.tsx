@@ -6,7 +6,7 @@ import { useUserContext } from "@/hooks/useUser";
 import { fetchListingsByUser, fetchProfile } from "@/lib/db_functions";
 import { supabase } from "@/lib/supabase_client";
 import styles from "@/styles/Login.module.css";
-import type { Listing, UserProfile } from "@/types";
+import type { Filters, Listing, UserProfile } from "@/types";
 
 export default function ProfilePage() {
   const { user, error, signIn, signOut } = useUserContext();
@@ -15,6 +15,13 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [uploading, setUploading] = useState(false);
+  const [filters, setFilters] = useState<Filters>({
+    category: "",
+    color: "",
+    query: "",
+    minPrice: 0,
+    maxPrice: 2000, // you can calculate from your listings if you want
+  });
 
   useEffect(() => {
     if (!user) {
@@ -217,7 +224,11 @@ export default function ProfilePage() {
 
       <section className="profile-listings">
         <h2 className="profile-listings-title">My Listings</h2>
-        <ListingGrid collection={listings} />
+        <ListingGrid
+          collection={listings}
+          filters={filters}
+          onFilterChange={setFilters}
+        />
       </section>
     </main>
   );
