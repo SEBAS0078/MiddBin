@@ -2,7 +2,7 @@ import { useUserContext } from "@/hooks/useUser";
 import styles from "@/styles/Login.module.css";
 
 export default function Login() {
-  const { user, signIn, signOut, error } = useUserContext();
+  const { user, signIn } = useUserContext();
 
   if (user) {
     return (

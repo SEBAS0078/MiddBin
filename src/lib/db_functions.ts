@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase_client";
-import type { Listing, NewListing, UserProfile } from "@/types";
+import type { Filters, Listing, NewListing, UserProfile } from "@/types";
 
 export async function checkUserExists(partial: Partial<UserProfile> = {}) {
   const {
@@ -20,33 +20,100 @@ export async function checkUserExists(partial: Partial<UserProfile> = {}) {
   return data as UserProfile;
 }
 
-export async function fetchListings() {
-  const { error, data } = await supabase
+export async function fetchListings(
+  page: number,
+  pageSize: number,
+  filters: Filters,
+) {
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  let query = supabase
     .from("Listings")
-    .select("*")
+    .select("*", { count: "exact" })
     .eq("sold", false);
 
-  if (error) {
-    alert("Error fetching listings:");
-    return { error, data: [] };
+  if (filters.category) {
+    query = query.eq("category", filters.category);
   }
 
-  return { error: null, data: data ?? [] };
+  if (filters.color) {
+    query = query.eq("color", filters.color);
+  }
+
+  if (filters.minPrice !== undefined) {
+    query = query.gte("price", filters.minPrice);
+  }
+
+  if (filters.maxPrice !== undefined) {
+    query = query.lte("price", filters.maxPrice);
+  }
+
+  if (filters.query) {
+    query = query.ilike("title", `%${filters.query}%`);
+  }
+
+  query = query.range(from, to);
+
+  const { data, error, count } = await query;
+
+  return { data: data ?? [], error, count: count ?? 0 };
 }
 
-export async function fetchListingsUser(userId: string) {
-  const { error, data } = await supabase
+export async function fetchListingsUser(
+  userId: string,
+  page: number,
+  pageSize: number,
+  filters: Filters,
+) {
+  //Fetches listings excluding the user's own listings and applies filters
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  let query = supabase
     .from("Listings")
-    .select("*")
+    .select("*", { count: "exact" })
     .eq("sold", false)
     .neq("user_id", userId);
 
-  if (error) {
-    alert("Error fetching listings:");
-    return { error, data: [] };
+  //  Apply filters
+
+  if (filters.category) {
+    query = query.eq("category", filters.category);
   }
 
-  return { error: null, data: data ?? [] };
+  if (filters.color) {
+    query = query.eq("color", filters.color);
+  }
+
+  if (filters.minPrice !== undefined) {
+    query = query.gte("price", filters.minPrice);
+  }
+
+  if (filters.maxPrice !== undefined) {
+    query = query.lte("price", filters.maxPrice);
+  }
+
+  if (filters.query) {
+    query = query.or(
+      `title.ilike.%${filters.query}%,description.ilike.%${filters.query}%`,
+    );
+  }
+
+  // 📄 Apply pagination
+  query = query.range(from, to);
+
+  const { data, error, count } = await query;
+
+  if (error) {
+    return { error, data: [], count: 0 };
+  }
+
+  return {
+    error: null,
+    data: data ?? [],
+    count: count ?? 0,
+  };
 }
 
 export async function fetchListingById(listingId: string): Promise<Listing> {

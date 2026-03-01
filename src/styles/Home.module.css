@@ -224,3 +224,24 @@
     gap: 30px;
   }
 }
+
+.prevBtn,
+.nxtBtn {
+  padding: 0.3rem 0.6rem;
+  margin: 1rem;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
+  font-size: 1.3rem;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.prevBtn:hover,
+.nxtBtn:hover {
+  background-color: rgb(174, 174, 174);
+  border: 1px solid rgb(190, 190, 190);
+
+  transform: scale(1.1);
+}

@@ -52,34 +52,67 @@ export default function ProfilePage() {
     if (!file || !user) return;
 
     setUploading(true);
+
     try {
+      /*
+      1. Delete existing avatar if it exists
+    */
+      if (avatarUrl) {
+        try {
+          const url = new URL(avatarUrl);
+          const pathParts = url.pathname.split("/avatars/");
+          if (pathParts[1]) {
+            const oldPath = pathParts[1].split("?")[0];
+            await supabase.storage.from("avatars").remove([oldPath]);
+          }
+        } catch {
+          // ignore deletion errors
+        }
+      }
+
+      /*
+      2. Upload new avatar
+    */
       const ext = file.name.split(".").pop()?.toLowerCase() || "png";
       const filePath = `${user.id}/avatar-${Date.now()}.${ext}`;
 
       const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          upsert: false,
+        });
 
       if (uploadError) throw uploadError;
 
+      /*
+      3. Get public URL
+    */
       const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
       const publicUrl = data.publicUrl;
 
-      await supabase
+      /*
+      4. Update profile table
+    */
+      const { error: updateError } = await supabase
         .from("profiles")
         // biome-ignore lint/style/useNamingConvention: Supabase column is snake_case
         .update({ avatar_url: publicUrl })
         .eq("id", user.id);
 
+      if (updateError) throw updateError;
+
+      /*
+      5. Update UI with cache busting
+    */
       setAvatarUrl(`${publicUrl}?t=${Date.now()}`);
     } catch (_err) {
-      // log removed (biome noConsole)
       alert("Upload failed");
     } finally {
       event.target.value = "";
       setUploading(false);
     }
   }
+
   // Not signed in
   if (!user) {
     return (

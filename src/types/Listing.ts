@@ -25,3 +25,11 @@ export type UserProfile = {
   // biome-ignore lint/style/useNamingConvention: Supabase column is snake_case
   avatar_url?: string;
 };
+
+export type Filters = {
+  category?: string;
+  color?: string;
+  query?: string;
+  minPrice?: number;
+  maxPrice?: number;
+};
